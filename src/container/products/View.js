@@ -146,7 +146,7 @@ const View = ({
   }, [product, options]);
 
   //합계 계산
-  useEffect(() => {
+  const total = useMemo(() => {
     if (options) {
       const price = options.price;
       const shotTotal = options.shot.count * options.shot.extra;
@@ -157,16 +157,18 @@ const View = ({
         options.syrup.hazelnut.count * options.syrup.hazelnut.price;
       const vanillaTotal =
         options.syrup.vanilla.count * options.syrup.vanilla.price;
-      const total =
+
+      return (
         (price +
           shotTotal +
           mochaTotal +
           caramelTotal +
           hazelnutTotal +
           vanillaTotal) *
-        options.count;
+        options.count
+      );
 
-      onSetTotal(total);
+      // onSetTotal(total);
     }
   }, [options]);
 
@@ -225,7 +227,7 @@ const View = ({
             </div>
             <div className="itemInfo">
               <p className="ko">{product.ko}</p>
-              <p className="price">{options.total}</p>
+              <p className="price">{total}</p>
             </div>
             <ItemCount
               count={options.count}
