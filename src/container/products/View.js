@@ -217,7 +217,11 @@ const View = ({
         <form>
           <ItemBase className="clear">
             <div className="itemImg">
-              <img src={productsImage[`${type}_${kind}`]} alt="에스프레소" />
+              <img
+                src={productsImage[`${type}_${kind}`]}
+                width="150"
+                alt="에스프레소"
+              />
             </div>
             <div className="itemInfo">
               <p className="ko">{product.ko}</p>

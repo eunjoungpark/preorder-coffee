@@ -69,7 +69,11 @@ const Product = ({ lists }) => {
         return (
           <ListItem key={`hot${index}`}>
             <Link to={url}>
-              <img src={productsImage[`hot_${kind}`]} alt={hotItem.ko} />
+              <img
+                src={productsImage[`hot_${kind}`]}
+                width="180"
+                alt={hotItem.ko}
+              />
               <p className="en">{hotItem.en}</p>
               <p className="ko">{hotItem.ko}</p>
               <p className="price">{hotItem.price}</p>
