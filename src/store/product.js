@@ -1,8 +1,8 @@
 import { createAction, handleActions } from 'redux-actions';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { delay, call, put, takeLatest } from 'redux-saga/effects';
 import * as api from '../libs/api';
 import { startLoading, finishLoading } from './loadings';
-import { startError } from './error';
+import { errorMessage } from './error';
 import produce from 'immer';
 
 /* TYPE 정의 */
@@ -10,8 +10,6 @@ const INIT_PRODUCTS = 'product/INIT_PRODUCTS';
 export const SET_PRODUCTS = 'product/SET_PRODUCTS';
 const INIT_PRODUCT = 'product/INIT_PRODUCT';
 const SET_PRODUCT = 'product/SET_PRODUCT';
-// const PRODUCT_LIST_SUCCESS = 'product/PRODUCT_LIST_SUCCESS';
-// const PRODUCT_LIST_FAILURE = 'product/PRODUCT_LIST_FAILURE';
 
 /* ACTION 정의 */
 export const initProducts = createAction(INIT_PRODUCTS);
@@ -19,25 +17,25 @@ export const initProduct = createAction(INIT_PRODUCT);
 export const onSetProduct = createAction(SET_PRODUCT, payload => payload);
 
 /* 비동기 정의 */
-function* fetchListAsync() {
+const fetchListAsync = function*() {
   yield put(startLoading(SET_PRODUCTS));
-
-  const response = yield call(api.products);
   try {
+    const response = yield call(api.products);
+    yield delay(500);
     yield put({
       type: SET_PRODUCTS,
       payload: response.data,
     });
   } catch (e) {
-    yield put(startError(SET_PRODUCTS));
+    yield put(errorMessage({ action: SET_PRODUCTS, message: e }));
   }
   yield put(finishLoading(SET_PRODUCTS));
-}
+};
 
 /* 비동기호출 정의 */
-export function* productListAsync() {
+export const productListAsync = function*() {
   yield takeLatest(INIT_PRODUCTS, fetchListAsync);
-}
+};
 
 /* 초기값 정의 */
 const initialState = {

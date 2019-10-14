@@ -7,6 +7,8 @@ const theme = {
   base: { color: '#8c6046', font: '#fff' },
   danger: { color: '#ba0220' },
   success: { color: '#2cb94d' },
+  dark: { color: '#000', font: '#fff' },
+  gray: { color: '#666', font: '#fff' },
 };
 
 const Btn = styled.button`
@@ -17,11 +19,15 @@ const Btn = styled.button`
   color: ${props => props.theme.font};
 `;
 
-const Button = ({ type, kind, children, onClick }) => {
+const Button = ({ type, kind, children, onClick, className }) => {
   const thisTheme = theme[kind];
   return (
     <ThemeProvider theme={thisTheme}>
-      <Btn type={type ? type : 'button'} onClick={onClick}>
+      <Btn
+        type={type ? type : 'button'}
+        onClick={onClick}
+        className={className}
+      >
         {children}
       </Btn>
     </ThemeProvider>

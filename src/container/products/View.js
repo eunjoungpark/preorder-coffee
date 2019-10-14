@@ -7,6 +7,7 @@ import { MdSend } from 'react-icons/md';
 import styled from 'styled-components';
 import Button from '../../components/form/button/Button';
 import RadioBtn from '../../components/form/radio/RadioBtn';
+import Input from '../../components/form/input/Input';
 import {
   Contents,
   PageTitle,
@@ -15,7 +16,10 @@ import {
 } from '../../components/common';
 import ItemCount from '../../components/form/itemGroup/ItemCount';
 import ItemGroup from '../../components/form/itemGroup/ItemGroup';
+import Modal from '../../components/modal/Modal';
+import Loading from '../../components/loading/Loading';
 import * as productsImage from '../../images/products';
+import { commas } from '../../libs/util';
 import { onSetProduct } from '../../store/product';
 import {
   onSetCount,
@@ -26,23 +30,27 @@ import {
   onSetMessages,
   onSetShot,
   onSetPrice,
+  onSetType,
   cups,
+  types,
 } from '../../store/options';
+import { addWish, ADD_WISH } from '../../store/wish';
+import { addMenu, ADD_MY_MENU } from '../../store/mymenu';
+import { emptyLoading } from '../../store/loadings';
 
 const ItemBase = styled.div`
   margin: 0 5px;
   .itemImg {
     float: left;
-    width: 50%;
+    width: 170px;
     text-align: center;
     img {
       width: 150px;
     }
   }
   .itemInfo {
-    float: right;
-    width: 50%;
     margin-bottom: 20px;
+    overflow: hidden;
   }
   p.ko {
     font-size: 18px;
@@ -61,16 +69,40 @@ const OptionGroup = styled.section`
     padding: 10px;
   }
   .noneMsg {
-    color: #36a2cf;
+    color: #000;
     text-align: center;
+    line-height: 1.2;
+    font-size: 17px;
+    svg {
+      vertical-align: top;
+      font-size: 20px;
+    }
   }
 `;
 
 const OptionBox = styled.div`
-  li {
-    color: #8c6046;
-    padding: 5px;
-    font-size: 16px;
+  text-align: left;
+  ul {
+    margin-bottom: 15px;
+    li {
+      color: #8c6046;
+      padding: 0 5px;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+  }
+  fieldset {
+    padding: 0 5px;
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+    input {
+      line-height: 24px;
+      padding: 5px;
+      width: 100%;
+    }
   }
 `;
 
@@ -79,9 +111,9 @@ const MAX = 20;
 const View = ({
   history,
   location,
-  lists,
   product,
   options,
+  auth,
   onSetProduct,
   onSetSyrup,
   onSetCount,
@@ -90,38 +122,46 @@ const View = ({
   onSetTotal,
   onSetShot,
   onSetPrice,
+  onSetType,
   onSetMessages,
+  addWish,
+  addMenu,
+  loadingAddWish,
+  loadingAddMenu,
+  emptyLoading,
 }) => {
   const { type, kind } = qs(location);
   const s = kind === 'espresso' ? 'Solo' : 'Tall';
   const [hasMsg, setHasMsg] = useState(false);
+  const [shown, setShown] = useState(true);
+  const [menuName, setMenuName] = useState('');
 
-  //사이즈설정
   useEffect(() => {
-    if (options && options.size === '') {
-      onSetSize(s);
+    if (!product) {
+      onSetProduct({ type, kind });
     }
   }, []);
 
-  //제품 설정
   useEffect(() => {
-    if (lists) {
-      onSetProduct({ type, kind });
-    }
-  }, [lists]);
-
-  useEffect(() => {
-    if (product && options && options.size !== '') {
+    if (options.size === '') {
+      onSetSize(s);
+    } else if (options && product) {
       const { price, sizes } = product;
-      const { size } = options;
+      const { size, shot, syrup, messages } = options;
+
+      //나만의 메뉴명
+      setMenuName(product.ko);
+
+      //음료 타입
+      onSetType(type);
 
       //음료 단가
       onSetPrice(price + sizes[size].extra);
 
       //에스프레소 수
       onSetShot(
-        produce(options.shot, draft => {
-          draft.base = sizes[options.size].shot;
+        produce(shot, draft => {
+          draft.base = sizes[size].shot;
         }),
       );
 
@@ -129,7 +169,7 @@ const View = ({
       if (sizes[size]['syrup']) {
         Object.keys(sizes[size].syrup).forEach(sp => {
           onSetSyrup(
-            produce(options.syrup, draft => {
+            produce(syrup, draft => {
               draft[sp].base = sizes[size].syrup[sp];
             }),
           );
@@ -138,8 +178,8 @@ const View = ({
 
       //메세지 설정
       setHasMsg(
-        Object.keys(options.messages).every(key => {
-          return options.messages[key] === '';
+        Object.keys(messages).every(key => {
+          return messages[key] === '';
         }),
       );
     }
@@ -147,17 +187,28 @@ const View = ({
 
   //합계 계산
   const total = useMemo(() => {
-    if (options) {
-      const price = options.price;
+    if (product && options) {
+      const price = options.size
+        ? product.price + product.sizes[options.size].extra
+        : product.price + product.sizes[s].extra;
       const shotTotal = options.shot.count * options.shot.extra;
-      const mochaTotal = options.syrup.mocha.count * options.syrup.mocha.price;
+      const mochaTotal = options.syrup.mocha.count * options.syrup.mocha.extra;
       const caramelTotal =
-        options.syrup.caramel.count * options.syrup.caramel.price;
+        options.syrup.caramel.count * options.syrup.caramel.extra;
       const hazelnutTotal =
-        options.syrup.hazelnut.count * options.syrup.hazelnut.price;
+        options.syrup.hazelnut.count * options.syrup.hazelnut.extra;
       const vanillaTotal =
-        options.syrup.vanilla.count * options.syrup.vanilla.price;
+        options.syrup.vanilla.count * options.syrup.vanilla.extra;
 
+      onSetTotal(
+        (price +
+          shotTotal +
+          mochaTotal +
+          caramelTotal +
+          hazelnutTotal +
+          vanillaTotal) *
+          options.count,
+      );
       return (
         (price +
           shotTotal +
@@ -167,13 +218,16 @@ const View = ({
           vanillaTotal) *
         options.count
       );
-
-      // onSetTotal(total);
     }
-  }, [options]);
+  }, [product, options]);
+
+  useEffect(() => {
+    return () => emptyLoading();
+  }, []);
 
   //음료타입 변경
   const onSetHandlerType = useCallback(coffeeType => {
+    onSetType(coffeeType);
     history.push(`/view?type=${coffeeType}&kind=${kind}`);
   }, []);
 
@@ -211,23 +265,85 @@ const View = ({
     onSetSize(sizeSel);
   }, []);
 
+  //모달
+  const onClickShownHandler = useCallback(() => {
+    if (auth.localId === null) {
+      alert('로그인 먼저해주세요.');
+    } else {
+      setShown(!shown);
+    }
+  }, [shown]);
+
+  //위시 리스트 담기
+  const onClickWishhandler = useCallback(() => {
+    if (auth.localId === null) {
+      alert('로그인 먼저해주세요.');
+    } else {
+      for (let i = 0; i < options.count; i++) {
+        addWish({
+          token: auth.idToken,
+          userId: auth.localId,
+          wish: {
+            ...options,
+            userId: auth.localId,
+            nickname: '',
+            ko: product.ko,
+            en: product.en,
+            count: 1,
+            checked: true,
+            total: options.total / options.count,
+          },
+        });
+      }
+    }
+  }, [auth, product, options]);
+
+  //나만의 메뉴명
+  const onChangeMenuHandler = useCallback(e => {
+    const { value } = e.target;
+    setMenuName(value);
+  }, []);
+
+  //나만의 음료등록
+  const onClickMyMenuHandler = useCallback(() => {
+    if (auth.localId === null) {
+      alert('로그인 먼저해주세요.');
+    } else {
+      addMenu({
+        token: auth.idToken,
+        userId: auth.localId,
+        menu: {
+          ...options,
+          userId: auth.localId,
+          nickname: menuName,
+          ko: product.ko,
+          en: product.en,
+          total: options.total / options.count,
+          count: 1,
+          image: `${type}_${kind}`,
+        },
+      });
+      setShown(!shown);
+    }
+  }, [menuName, shown]);
+
   return (
     product &&
     options && (
       <Contents>
-        <PageTitle ko="아메리카노">{product.en}</PageTitle>
+        <PageTitle ko={product.ko}>{product.en}</PageTitle>
         <form>
           <ItemBase className="clear">
             <div className="itemImg">
               <img
                 src={productsImage[`${type}_${kind}`]}
                 width="150"
-                alt="에스프레소"
+                alt={product.ko}
               />
             </div>
             <div className="itemInfo">
               <p className="ko">{product.ko}</p>
-              <p className="price">{total}</p>
+              <p className="price">{commas(total)}</p>
             </div>
             <ItemCount
               count={options.count}
@@ -290,36 +406,73 @@ const View = ({
         </form>
         <OptionGroup>
           <SubTitle>추가옵션</SubTitle>
-          {!hasMsg && (
-            <OptionBox>
-              <ul>
-                {Object.keys(options.messages).map(option => {
-                  return options.messages[option] !== '' ? (
-                    <li key={option}>{options.messages[option]}</li>
-                  ) : null;
-                })}
-              </ul>
-            </OptionBox>
-          )}
           <Link to={`/options?type=${type}&kind=${kind}`}>
             <p className="noneMsg">
-              추가옵션 선택하기 <MdSend />
+              옵션선택 하러가기 <MdSend />
             </p>
           </Link>
           <FlextCont>
-            <Button kind="base">나만의 메뉴등록</Button>
-            <Button kind="base">음료 담기</Button>
+            <Button kind="base" onClick={onClickShownHandler}>
+              나만의 메뉴등록
+            </Button>
+            <Button kind="base" onClick={onClickWishhandler}>
+              음료 담기
+            </Button>
           </FlextCont>
         </OptionGroup>
+        {(loadingAddWish || loadingAddMenu) && <Loading />}
+        {/* 나만의 메뉴 등록 모달 */}
+        <Modal shown={shown}>
+          <h1>나만의 메뉴 등록</h1>
+          {!hasMsg && (
+            <OptionBox>
+              <ul>
+                <li>
+                  {types[options.type]}/{options.size}/{cups[options.cup]}
+                </li>
+                <li>
+                  {Object.keys(options.messages).map(option => {
+                    return options.messages[option] !== '' &&
+                      'cup size'.indexOf(option) < 0
+                      ? options.messages[option] + '/'
+                      : null;
+                  })}
+                </li>
+              </ul>
+              <Input
+                type="text"
+                id="myName"
+                label="나만의 음료명"
+                value={menuName}
+                placeholder="나만의 음료에 이름을 붙여보세요"
+                changed={onChangeMenuHandler}
+              />
+            </OptionBox>
+          )}
+          <FlextCont>
+            <Button kind="gray" type="cancel" onClick={onClickShownHandler}>
+              취소
+            </Button>
+            <Button kind="dark" onClick={onClickMyMenuHandler}>
+              확인
+            </Button>
+          </FlextCont>
+        </Modal>
+        {/* 나만의 음료 담기완료 모달 */}
+        {loadingAddMenu === false && <Modal>나만의 음료를 저장 했습니다</Modal>}
+        {/* 위시리스트 담기완료 모달 */}
+        {loadingAddWish === false && <Modal>담기를 완료 했습니다</Modal>}
       </Contents>
     )
   );
 };
 
-const mapStateToProps = ({ product, options }) => ({
-  lists: product.lists,
+const mapStateToProps = ({ auth, product, options, loadings }) => ({
   product: product.product,
-  options: options.opt,
+  options: options,
+  auth: auth,
+  loadingAddWish: loadings[ADD_WISH],
+  loadingAddMenu: loadings[ADD_MY_MENU],
 });
 
 const mapDispatchToProps = {
@@ -331,7 +484,11 @@ const mapDispatchToProps = {
   onSetTotal,
   onSetShot,
   onSetPrice,
+  onSetType,
   onSetMessages,
+  addWish,
+  addMenu,
+  emptyLoading,
 };
 
 export default connect(

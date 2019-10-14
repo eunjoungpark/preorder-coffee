@@ -1,17 +1,23 @@
 import { createAction, handleActions } from 'redux-actions';
+import produce from 'immer';
 
-const START_ERROR = 'error/START_ERROR';
-const FINISH_ERROR = 'error/FINISH_ERROR';
+const ERROR_MESSAGE = 'error/ERROR_MESSAGE';
+const EMPTY_MESSAGE = 'error/EMPTY_MESSAGE';
 
-export const startError = createAction(START_ERROR, errorType => errorType);
-export const finishError = createAction(FINISH_ERROR, errorType => errorType);
-
+export const errorMessage = createAction(ERROR_MESSAGE, payload => payload);
+export const emptyMessage = createAction(EMPTY_MESSAGE, type => type);
 const initialState = {};
 
 const error = handleActions(
   {
-    [START_ERROR]: (state, action) => ({ ...state, [action.payload]: true }),
-    [FINISH_ERROR]: (state, action) => ({ ...state, [action.payload]: false }),
+    [ERROR_MESSAGE]: (state, { payload }) =>
+      produce(state, draft => {
+        draft[payload.action] = payload.error;
+      }),
+    [EMPTY_MESSAGE]: (state, { payload: type }) =>
+      produce(state, draft => {
+        draft[type] = null;
+      }),
   },
   initialState,
 );

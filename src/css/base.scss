@@ -1,16 +1,122 @@
-html, body {margin:0; padding:0;}
-body {font-family:'맑은 고딕', 'Malgun Gothic', '돋움', dotum; color:#000; font-size:16px;}
-div, p, ul, ol, li, h1, h2, h3, h4, h5, h6, table, tbody, tr, td, tfoot, thead, dl, dt, dd, fieldset, legend, form, span, a, b, em, button, address, section, aside, main, footer, header, nav, img, label {margin:0; padding:0; line-height:1; box-sizing:border-box;}
-ul, ol, li {list-style:none;}
-h1, h2, h3, h4, h5, h6 {font-weight:normal;}
-button {cursor:pointer;}
-a, em, b {text-decoration:none; font-style: normal;}
-a {color:#000; cursor: pointer;}
-img, fieldset {border:0;}
-select, input, button {margin:0; padding:0; line-height:1; -webkit-appearance:none; appearance:none; border:0; background:transparent;}
-section, aside, main, footer, header, nav {display:block;}
-
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: '맑은 고딕', 'Malgun Gothic', '돋움', dotum;
+  color: #000;
+  font-size: 16px;
+  line-height: 1;
+}
+div,
+p,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+table,
+tbody,
+tr,
+td,
+tfoot,
+thead,
+dl,
+dt,
+dd,
+fieldset,
+legend,
+form,
+span,
+a,
+b,
+em,
+button,
+address,
+section,
+aside,
+main,
+footer,
+header,
+nav,
+img,
+label {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ul,
+ol,
+li {
+  list-style: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+button {
+  cursor: pointer;
+}
+a,
+em,
+b {
+  text-decoration: none;
+  font-style: normal;
+}
+a {
+  color: #000;
+  cursor: pointer;
+}
+img,
+fieldset {
+  border: 0;
+}
+select,
+input,
+button {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  background: transparent;
+}
+section,
+aside,
+main,
+footer,
+header,
+nav {
+  display: block;
+}
+table {
+  border-collapse: collapse;
+}
 
 /* default style */
-.hidden {overflow:hidden; position:absolute !important; clip:rect(0, 0, 0, 0); width:1px; height:1px; margin:-1px;}
-.clear:after {content:"";clear:both;display:block;overflow:hidden;visibility:hidden;height:0;}
+.hidden {
+  overflow: hidden;
+  position: absolute !important;
+  clip: rect(0, 0, 0, 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+}
+.clear:after {
+  content: '';
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  height: 0;
+}

@@ -3,7 +3,11 @@ import product, { productListAsync } from './product';
 import loadings from './loadings';
 import error from './error';
 import options, { optionsAsync } from './options';
-import wish from './wish';
+import auth, { authAsync } from './auth';
+import store, { storeAsync } from './store';
+import wish, { wishAsync } from './wish';
+import mymenu, { menuAsync } from './mymenu';
+import order, { orderAsync } from './order';
 import { all } from 'redux-saga/effects';
 
 const rootReducers = combineReducers({
@@ -12,10 +16,22 @@ const rootReducers = combineReducers({
   error,
   options,
   wish,
+  auth,
+  store,
+  mymenu,
+  order,
 });
 
 export function* rootSaga() {
-  yield all([productListAsync(), optionsAsync()]);
+  yield all([
+    productListAsync(),
+    optionsAsync(),
+    authAsync(),
+    storeAsync(),
+    wishAsync(),
+    menuAsync(),
+    orderAsync(),
+  ]);
 }
 
 export default rootReducers;

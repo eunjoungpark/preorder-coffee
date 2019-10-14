@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import qs from '../../libs/qs';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { MdKeyboardArrowRight } from 'react-icons/md';
+import { commas } from '../../libs/util';
 
 import {
   Contents,
@@ -46,17 +48,21 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
     history.push(url);
   }, []);
 
+  if (!product) {
+    onSetHandlerOptions();
+  }
+
   useEffect(() => {
     if (options) {
       const price = options.price;
       const shotTotal = options.shot.count * options.shot.extra;
-      const mochaTotal = options.syrup.mocha.count * options.syrup.mocha.price;
+      const mochaTotal = options.syrup.mocha.count * options.syrup.mocha.extra;
       const caramelTotal =
-        options.syrup.caramel.count * options.syrup.caramel.price;
+        options.syrup.caramel.count * options.syrup.caramel.extra;
       const hazelnutTotal =
-        options.syrup.hazelnut.count * options.syrup.hazelnut.price;
+        options.syrup.hazelnut.count * options.syrup.hazelnut.extra;
       const vanillaTotal =
-        options.syrup.vanilla.count * options.syrup.vanilla.price;
+        options.syrup.vanilla.count * options.syrup.vanilla.extra;
       const total =
         (price +
           shotTotal +
@@ -84,9 +90,11 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
           <ul>
             <li>
               <Link to={`/details?type=${type}&kind=${kind}&option=shot`}>
-                커피 ({shotTot} 원)
+                커피 ({shotTot < 0 ? 0 : commas(shotTot)} 원)
                 <ul>
-                  <li>에스프레소 {options.shot.base + options.shot.count}</li>
+                  <li>
+                    에스프레소 샷 {options.shot.base + options.shot.count}
+                  </li>
                   {options.shot.decaffeine &&
                     Object.keys(options.shot.decaffeine).map(prop =>
                       options.shot.decaffeine[prop] ? (
@@ -98,7 +106,7 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
             </li>
             <li>
               <Link to={`/details?type=${type}&kind=${kind}&option=syrup`}>
-                시럽 ({syrupTot} 원)
+                시럽 ({syrupTot < 0 ? 0 : commas(syrupTot)} 원)
                 <ul>
                   {Object.keys(options.syrup).map(prop => {
                     const { base, count } = options.syrup[prop];
@@ -125,60 +133,56 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
                 </Link>
               </li>
             ) : null}
-            {kind !== 'espresso'
-              ? ((kind === 'americano' ? (
+            {kind !== 'espresso' ? (
+              kind === 'americano' ? (
+                <li>
+                  <Link to={`/details?type=${type}&kind=${kind}&option=water`}>
+                    물
+                    <ul>
+                      {Object.keys(options.ice).map(prop =>
+                        options.water[prop] ? (
+                          <li key={prop}>{water[prop]}</li>
+                        ) : null,
+                      )}
+                    </ul>
+                  </Link>
+                </li>
+              ) : (
+                <>
                   <li>
-                    <Link
-                      to={`/details?type=${type}&kind=${kind}&option=water`}
-                    >
-                      물
+                    <Link to={`/details?type=${type}&kind=${kind}&option=milk`}>
+                      우유
                       <ul>
-                        {Object.keys(options.ice).map(prop =>
-                          options.water[prop] ? (
-                            <li key={prop}>{water[prop]}</li>
+                        {Object.keys(options.milk.kind).map(prop =>
+                          options.milk.kind[prop] ? (
+                            <li key={prop}>{milk.kind[prop]}</li>
+                          ) : null,
+                        )}
+                        {Object.keys(options.milk.volume).map(prop =>
+                          options.milk.volume[prop] ? (
+                            <li key={prop}>우유양 {milk.volume[prop]}</li>
                           ) : null,
                         )}
                       </ul>
                     </Link>
                   </li>
-                ) : (
-                  <>
-                    <li>
-                      <Link
-                        to={`/details?type=${type}&kind=${kind}&option=milk`}
-                      >
-                        우유
-                        <ul>
-                          {Object.keys(options.milk.kind).map(prop =>
-                            options.milk.kind[prop] ? (
-                              <li key={prop}>{milk.kind[prop]}</li>
-                            ) : null,
-                          )}
-                          {Object.keys(options.milk.volume).map(prop =>
-                            options.milk.volume[prop] ? (
-                              <li key={prop}>우유양 {milk.volume[prop]}</li>
-                            ) : null,
-                          )}
-                        </ul>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to={`/details?type=${type}&kind=${kind}&option=whipping`}
-                      >
-                        휘핑
-                        <ul>
-                          {Object.keys(options.whipping).map(prop =>
-                            options.whipping[prop] ? (
-                              <li key={prop}>{whipping[prop]}</li>
-                            ) : null,
-                          )}
-                        </ul>
-                      </Link>
-                    </li>
-                  </>
-                )): null)
-              : null}
+                  <li>
+                    <Link
+                      to={`/details?type=${type}&kind=${kind}&option=whipping`}
+                    >
+                      휘핑
+                      <ul>
+                        {Object.keys(options.whipping).map(prop =>
+                          options.whipping[prop] ? (
+                            <li key={prop}>{whipping[prop]}</li>
+                          ) : null,
+                        )}
+                      </ul>
+                    </Link>
+                  </li>
+                </>
+              )
+            ) : null}
           </ul>
           <FlextCont>
             <Button type="submit" kind="base" onClick={onSetHandlerOptions}>
@@ -193,7 +197,7 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
 
 const mapStateToProps = ({ product, options }) => ({
   product: product.product,
-  options: options.opt,
+  options: options,
 });
 
 const mapDispatchToProps = { onSetTotal };

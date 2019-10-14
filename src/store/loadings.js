@@ -1,6 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 const START_LOADING = 'loadings/START_LOADING';
 const FINISH_LOADING = 'loadings/FINISH_LOADING';
+const EMPTY_LOADING = 'loadings/EMPTY_LOADING';
 
 export const startLoading = createAction(
   START_LOADING,
@@ -12,6 +13,8 @@ export const finishLoading = createAction(
   requestType => requestType,
 );
 
+export const emptyLoading = createAction(EMPTY_LOADING);
+
 const initialState = {};
 
 const loadings = handleActions(
@@ -21,6 +24,7 @@ const loadings = handleActions(
       ...state,
       [action.payload]: false,
     }),
+    [EMPTY_LOADING]: state => initialState,
   },
   initialState,
 );

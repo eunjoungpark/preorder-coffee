@@ -62,6 +62,15 @@ const Detail = ({
     vanilla: 0,
   });
 
+  if (!product) {
+    history.push(`/view?type=${type}&kind=${kind}`);
+  }
+
+  const backPage = useCallback(() => {
+    const url = `/options?type=${type}&kind=${kind}`;
+    history.push(url);
+  }, []);
+
   useEffect(() => {
     if (options) {
       setShotNum(options.shot.base + options.shot.count);
@@ -74,11 +83,6 @@ const Detail = ({
       );
     }
   }, [options]);
-
-  const backPage = useCallback(() => {
-    const url = `/options?type=${type}&kind=${kind}`;
-    history.push(url);
-  }, []);
 
   //에스프레소 적용
   const onSetHandlerShot = useCallback(e => {
@@ -302,7 +306,7 @@ const Detail = ({
                 onDecrease={() => onSetHandlerShotDecrease(shotNum)}
                 onIncrease={() => onSetHandlerShotIncrease(shotNum)}
               >
-                에스프레소
+                에스프레소 샷
               </ItemCount>
               <ItemGroup label="디카페인 선택">
                 {Object.keys(options.shot.decaffeine).map((prop, index) => {
@@ -491,7 +495,7 @@ const Detail = ({
 
 const mapStateToProps = ({ product, options }) => ({
   product: product.product,
-  options: options.opt,
+  options: options,
 });
 
 const mapDispatchToProps = {

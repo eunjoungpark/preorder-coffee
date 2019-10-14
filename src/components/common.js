@@ -11,7 +11,7 @@ export const Contents = styled.section`
 
 /* Title */
 export const PageTitle = styled.h2`
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   color: #000;
   font-size: 26px;
   font-weight: bold;
