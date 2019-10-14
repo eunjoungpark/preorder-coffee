@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import produce from 'immer';
 import qs from '../../libs/qs';
-
+import Modal from '../../components/modal/Modal';
 import {
   Contents,
   PageTitle,
@@ -61,6 +61,8 @@ const Detail = ({
     caramel: 0,
     vanilla: 0,
   });
+  const [modalMsg, setModalMsg] = useState('');
+  const [alertModal, setAlertModal] = useState(true);
 
   if (!product) {
     history.push(`/view?type=${type}&kind=${kind}`);
@@ -120,7 +122,8 @@ const Detail = ({
   //에스프레소 수 감소
   const onSetHandlerShotDecrease = useCallback(cnt => {
     if (cnt - 1 <= 0) {
-      alert('최소 1개 이상 설정하실 수 있습니다.');
+      setAlertModal(false);
+      setModalMsg('최소 1개 이상 설정하실 수 있습니다.');
       return null;
     }
     setShotNum(cnt => cnt - 1);
@@ -129,7 +132,8 @@ const Detail = ({
   //에스프레소 수 증가
   const onSetHandlerShotIncrease = useCallback(cnt => {
     if (cnt + 1 > MAX) {
-      alert('최대 9개 까지 설정하실 수 있습니다.');
+      setAlertModal(false);
+      setModalMsg('최대 9개 까지 설정하실 수 있습니다.');
       return null;
     }
     setShotNum(cnt => cnt + 1);
@@ -169,11 +173,13 @@ const Detail = ({
     (s, cnt) => {
       const { syrup } = options;
       if (syrup[s].base > 0 && cnt - 1 <= 0) {
-        alert('최소 1개 이상 설정하실 수 있습니다.');
+        setAlertModal(false);
+        setModalMsg('최소 1개 이상 설정하실 수 있습니다.');
         return null;
       }
       if (cnt - 1 < 0) {
-        alert('최소 설정 상태입니다.');
+        setAlertModal(false);
+        setModalMsg('최소 설정 상태입니다.');
         return null;
       }
       setSyrupNum(
@@ -189,7 +195,8 @@ const Detail = ({
   const onSetHandlerSyrupIncrease = useCallback(
     (s, cnt) => {
       if (cnt + 1 > MAX) {
-        alert('최대 9개 까지 설정하실 수 있습니다.');
+        setAlertModal(false);
+        setModalMsg('최대 9개 까지 설정하실 수 있습니다.');
         return null;
       }
       setSyrupNum(
@@ -287,6 +294,11 @@ const Detail = ({
     backPage();
     e.preventDefault();
   }, []);
+
+  //모달가림
+  const onClickAlertHandler = useCallback(() => {
+    setAlertModal(true);
+  }, [alertModal]);
 
   return (
     product &&
@@ -488,6 +500,10 @@ const Detail = ({
             </FlextCont>
           </form>
         )}
+        {/* alert메시지 */}
+        <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
+          {modalMsg}
+        </Modal>
       </Contents>
     )
   );

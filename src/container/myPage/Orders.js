@@ -31,10 +31,6 @@ const OrderWrap = styled.div`
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          text-align: left;
-        }
-        .total {
-          text-align: left;
         }
       }
     }
@@ -68,9 +64,9 @@ const Orders = ({ auth, order, history, initOrderList, loadingOrder }) => {
           <table>
             <colgroup>
               <col width="10%" />
-              <col width="50%" />
-              <col width="20%" />
-              <col width="20%" />
+              <col width="35%" />
+              <col width="30%" />
+              <col width="25%" />
             </colgroup>
             <thead>
               <tr>

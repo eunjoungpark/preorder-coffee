@@ -18,7 +18,7 @@ import {
   WISH_LIST,
   REMOVE_WISH,
 } from '../../store/wish';
-import { addOrderList } from '../../store/order';
+import { addOrderList, ADD_ORDER_LIST } from '../../store/order';
 import { emptyLoading } from '../../store/loadings';
 
 const WishWrap = styled.div`
@@ -120,12 +120,15 @@ const Wish = ({
   updateWishList,
   checkedWish,
   removeWish,
-  loadingAddWish,
+  loadingRemoveWish,
+  loadingAddOrder,
   emptyLoading,
 }) => {
   const [total, setTotal] = useState(0);
   const [count, setCount] = useState(0);
   const [allCheck, setAllCheck] = useState(true);
+  const [modalMsg, setModalMsg] = useState('');
+  const [alertModal, setAlertModal] = useState(true);
 
   useEffect(() => {
     if (auth.localId === null) {
@@ -158,7 +161,7 @@ const Wish = ({
   //전체 선택 토글
   const onClickCheckHandler = useCallback(() => {
     if (auth.localId === null) {
-      alert('로그인 먼저해주세요.');
+      setModalMsg('로그인 먼저해주세요.');
     } else {
       updateWishList({
         token: auth.idToken,
@@ -176,7 +179,7 @@ const Wish = ({
   //결제할 항목 토글
   const onCheckHandler = useCallback((id, checked) => {
     if (auth.localId === null) {
-      alert('로그인 먼저해주세요.');
+      setModalMsg('로그인 먼저해주세요.');
     } else {
       checkedWish({
         token: auth.idToken,
@@ -201,9 +204,11 @@ const Wish = ({
   //주문 추가
   const onAddOrderHandler = useCallback(() => {
     if (auth.localId === null) {
-      alert('로그인 먼저해주세요.');
+      setAlertModal(false);
+      setModalMsg('로그인 먼저해주세요.');
     } else if (!selected) {
-      alert('주문하실 매장을 선택해주세요.');
+      setAlertModal(false);
+      setModalMsg('주문하실 매장을 선택해주세요.');
     } else {
       if (wish) {
         const firstMenu = wish[Object.keys(wish)[0]];
@@ -224,6 +229,15 @@ const Wish = ({
     }
   }, [wish, selected, total, count]);
 
+  //모달가림
+  const onClickAlertHandler = useCallback(() => {
+    setAlertModal(true);
+  }, [alertModal]);
+
+  //주문완료시, 목록이동
+  const onClickCompleteHandler = () => {
+    history.push('/');
+  };
   return (
     <Contents>
       <PageTitle>위시 리스트</PageTitle>
@@ -237,8 +251,16 @@ const Wish = ({
             checked={allCheck}
             className="allChk"
           />
-          {(loadingWish || loadingAddWish) && <Loading />}
-          {loadingAddWish === false && <Modal>삭제되었습니다.</Modal>}
+          {(loadingWish || loadingRemoveWish || loadingAddOrder) && <Loading />}
+          {loadingRemoveWish === false && <Modal>삭제되었습니다.</Modal>}
+          {loadingAddOrder === false && (
+            <Modal onClickHandler={() => onClickCompleteHandler}>
+              주문 완료했습니다.
+            </Modal>
+          )}
+          <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
+            {modalMsg}
+          </Modal>
           {Object.keys(wish).length > 0 ? (
             <>
               <ol className="list">
@@ -387,7 +409,8 @@ const mapStateToProps = ({ wish, auth, store, loadings }) => ({
   wish,
   auth,
   loadingWish: loadings[WISH_LIST],
-  loadingAddWish: loadings[REMOVE_WISH],
+  loadingRemoveWish: loadings[REMOVE_WISH],
+  loadingAddOrder: loadings[ADD_ORDER_LIST],
   selected: store.selected,
 });
 

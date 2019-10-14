@@ -1,14 +1,17 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../components/form/button/Button';
+import Modal from '../../components/modal/Modal';
+import Loading from '../../components/loading/Loading';
 import { Contents, PageTitle, FlextCont } from '../../components/common';
 import ItemCount from '../../components/form/itemGroup/ItemCount';
 import * as productsImage from '../../images/products';
 import { types, cups } from '../../store/options';
 import { setMenuCount } from '../../store/mymenu';
-import { addOrderList } from '../../store/order';
+import { addOrderList, ADD_ORDER_LIST } from '../../store/order';
+import { emptyLoading } from '../../store/loadings';
 import { commas } from '../../libs/util';
 
 const ItemBase = styled.div`
@@ -80,10 +83,18 @@ const MyMenuPay = ({
   selected,
   setMenuCount,
   addOrderList,
+  loadingAddOrder,
+  emptyLoading,
 }) => {
+  const [modalMsg, setModalMsg] = useState('');
+  const [alertModal, setAlertModal] = useState(true);
   if (!menu) {
     history.go(-1);
   }
+
+  useEffect(() => {
+    return () => emptyLoading();
+  }, []);
 
   //합계 계산
   const total = useMemo(() => {
@@ -93,29 +104,39 @@ const MyMenuPay = ({
   }, [menu]);
 
   //음료수 감소
-  const onHandlerDecreaseCount = useCallback(cnt => {
-    if (cnt - 1 < 1) {
-      alert('최소 수량은 1잔 이상입니다.');
-      return;
-    }
-    setMenuCount(cnt - 1);
-  }, []);
+  const onHandlerDecreaseCount = useCallback(
+    cnt => {
+      if (cnt - 1 < 1) {
+        setAlertModal(false);
+        setModalMsg('최소 수량은 1잔 이상입니다.');
+        return;
+      }
+      setMenuCount(cnt - 1);
+    },
+    [alertModal],
+  );
 
   // 음료수 증가
-  const onHandlerIncreaseCount = useCallback(cnt => {
-    if (cnt + 1 > MAX) {
-      alert('최대 주문가능 수량은 9잔 입니다.');
-      return;
-    }
-    setMenuCount(cnt + 1);
-  }, []);
+  const onHandlerIncreaseCount = useCallback(
+    cnt => {
+      if (cnt + 1 > MAX) {
+        setAlertModal(false);
+        setModalMsg('최대 주문가능 수량은 9잔 입니다.');
+        return;
+      }
+      setMenuCount(cnt + 1);
+    },
+    [alertModal],
+  );
 
   //주문 추가
   const onAddOrderHandler = useCallback(() => {
     if (auth.localId === null) {
-      alert('로그인 먼저해주세요.');
+      setAlertModal(false);
+      setModalMsg('로그인 먼저해주세요.');
     } else if (!selected) {
-      alert('주문하실 매장을 선택해주세요.');
+      setAlertModal(false);
+      setModalMsg('주문하실 매장을 선택해주세요.');
     } else {
       if (menu) {
         addOrderList({
@@ -135,10 +156,29 @@ const MyMenuPay = ({
     }
   }, [menu, selected]);
 
+  //모달가림
+  const onClickAlertHandler = useCallback(() => {
+    setAlertModal(true);
+  }, [alertModal]);
+
+  //주문완료시, 목록이동
+  const onClickCompleteHandler = useCallback(() => {
+    history.push('/');
+  }, []);
+
   return (
     menu && (
       <Contents>
         <PageTitle>나만의 음료 주문</PageTitle>
+        {loadingAddOrder && <Loading />}
+        {loadingAddOrder === false && (
+          <Modal onClickHandler={onClickCompleteHandler}>
+            주문이 완료되었습니다.
+          </Modal>
+        )}
+        <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
+          {modalMsg}
+        </Modal>
         <form>
           <ItemBase className="clear">
             <div className="itemImg">
@@ -200,13 +240,14 @@ const MyMenuPay = ({
   );
 };
 
-const mapStateToProps = ({ auth, mymenu, store }) => ({
+const mapStateToProps = ({ auth, mymenu, store, loadings }) => ({
   auth,
   menu: mymenu.menu,
   selected: store.selected,
+  loadingAddOrder: loadings[ADD_ORDER_LIST],
 });
 
-const mapDispatchToProps = { setMenuCount, addOrderList };
+const mapDispatchToProps = { setMenuCount, addOrderList, emptyLoading };
 
 export default connect(
   mapStateToProps,

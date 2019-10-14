@@ -135,6 +135,8 @@ const View = ({
   const [hasMsg, setHasMsg] = useState(false);
   const [shown, setShown] = useState(true);
   const [menuName, setMenuName] = useState('');
+  const [modalMsg, setModalMsg] = useState('');
+  const [alertModal, setAlertModal] = useState(true);
 
   useEffect(() => {
     if (!product) {
@@ -234,7 +236,8 @@ const View = ({
   //음료수 감소
   const onHandlerDecreaseCount = useCallback(cnt => {
     if (cnt - 1 < 1) {
-      alert('최소 수량은 1잔 이상입니다.');
+      setAlertModal(false);
+      setModalMsg('최소 수량은 1잔 이상입니다.');
       return;
     }
     onSetCount(cnt - 1);
@@ -243,7 +246,8 @@ const View = ({
   // 음료수 증가
   const onHandlerIncreaseCount = useCallback(cnt => {
     if (cnt + 1 > MAX) {
-      alert('최대 주문가능 수량은 9잔 입니다.');
+      setAlertModal(false);
+      setModalMsg('최대 주문가능 수량은 9잔 입니다.');
       return;
     }
     onSetCount(cnt + 1);
@@ -265,10 +269,11 @@ const View = ({
     onSetSize(sizeSel);
   }, []);
 
-  //모달
+  // 나만의 메뉴등록 모달
   const onClickShownHandler = useCallback(() => {
     if (auth.localId === null) {
-      alert('로그인 먼저해주세요.');
+      setAlertModal(false);
+      setModalMsg('로그인 먼저해주세요.');
     } else {
       setShown(!shown);
     }
@@ -277,7 +282,8 @@ const View = ({
   //위시 리스트 담기
   const onClickWishhandler = useCallback(() => {
     if (auth.localId === null) {
-      alert('로그인 먼저해주세요.');
+      setAlertModal(false);
+      setModalMsg('로그인 먼저해주세요.');
     } else {
       for (let i = 0; i < options.count; i++) {
         addWish({
@@ -307,7 +313,8 @@ const View = ({
   //나만의 음료등록
   const onClickMyMenuHandler = useCallback(() => {
     if (auth.localId === null) {
-      alert('로그인 먼저해주세요.');
+      setAlertModal(false);
+      setModalMsg('로그인 먼저해주세요.');
     } else {
       addMenu({
         token: auth.idToken,
@@ -326,6 +333,11 @@ const View = ({
       setShown(!shown);
     }
   }, [menuName, shown]);
+
+  //모달가림
+  const onClickAlertHandler = useCallback(() => {
+    setAlertModal(true);
+  }, [alertModal]);
 
   return (
     product &&
@@ -421,6 +433,12 @@ const View = ({
           </FlextCont>
         </OptionGroup>
         {(loadingAddWish || loadingAddMenu) && <Loading />}
+
+        {/* alert메시지 */}
+        <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
+          {modalMsg}
+        </Modal>
+
         {/* 나만의 메뉴 등록 모달 */}
         <Modal shown={shown}>
           <h1>나만의 메뉴 등록</h1>

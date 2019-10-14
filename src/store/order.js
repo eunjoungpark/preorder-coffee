@@ -7,7 +7,7 @@ import { errorMessage } from './error';
 export const ORDER_LIST = 'orders/ORDER_LIST';
 const INIT_ORDER_LIST = 'orders/INIT_ORDER_LIST';
 const SET_ORDER_LIST = 'orders/SET_ORDER_LIST';
-const ADD_ORDER_LIST = 'orders/ADD_ORDER_LIST';
+export const ADD_ORDER_LIST = 'orders/ADD_ORDER_LIST';
 
 export const initOrderList = createAction(INIT_ORDER_LIST, auth => auth);
 export const addOrderList = createAction(ADD_ORDER_LIST, payload => payload);
@@ -24,6 +24,7 @@ const fetchOrderAsync = function*({ payload: auth }) {
 };
 
 const addOrderAsync = function*({ payload }) {
+  yield put(startLoading(ADD_ORDER_LIST));
   try {
     yield call(api.addOrder, payload.token, payload.order);
     yield put({
@@ -33,6 +34,7 @@ const addOrderAsync = function*({ payload }) {
         userId: payload.userId,
       },
     });
+    yield put(finishLoading(ADD_ORDER_LIST));
   } catch (e) {
     yield put(errorMessage({ action: ADD_ORDER_LIST, message: e }));
   }
