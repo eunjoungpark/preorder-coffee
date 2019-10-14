@@ -222,7 +222,7 @@ const Wish = ({
               (count > 1 ? ` 외 ${count - 1}잔` : ' 1잔'),
             total: total,
             store: selected,
-            date: new Date(),
+            date: new Date().getTime(),
           },
         });
       }
@@ -254,7 +254,7 @@ const Wish = ({
           {(loadingWish || loadingRemoveWish || loadingAddOrder) && <Loading />}
           {loadingRemoveWish === false && <Modal>삭제되었습니다.</Modal>}
           {loadingAddOrder === false && (
-            <Modal onClickHandler={() => onClickCompleteHandler}>
+            <Modal onClickHandler={onClickCompleteHandler}>
               주문 완료했습니다.
             </Modal>
           )}

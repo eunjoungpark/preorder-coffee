@@ -149,7 +149,7 @@ const MyMenuPay = ({
               (menu.count > 1 ? ` 외 ${menu.count - 1}잔` : ' 1잔'),
             total: total,
             store: selected,
-            date: new Date(),
+            date: new Date().getTime(),
           },
         });
       }

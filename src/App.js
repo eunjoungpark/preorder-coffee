@@ -41,8 +41,8 @@ const App = ({
   emptyWishList,
 }) => {
   const [cntWish, setCntWish] = useState(0);
-  const [appear, setAppear] = useState(false);
-  const [reLogin, setReLogin] = useState(false);
+  const [appear, setAppear] = useState(true);
+  const [reLogin, setReLogin] = useState(true);
 
   //리프래시에도 로그인상태 유지
   useEffect(() => {
@@ -89,7 +89,7 @@ const App = ({
       new Date(auth.expiresDate).getTime() - new Date().getTime();
     if (currentExpire > 0) {
       setTimeout(() => {
-        setAppear(true);
+        setAppear(false);
       }, currentExpire);
     }
   }, [auth.expiresDate]);
@@ -109,14 +109,15 @@ const App = ({
 
       if (expectExpire > 0 && result) {
         accessAuth(600000); //유효시간 연장(10분)
+      } else if (expectExpire < 0 && result) {
+        setReLogin(false);
       } else {
-        setReLogin(true);
         removeAuth(); //로그아웃
         initOptions(); //옵션 초기화
         emptyMenu(); //나만의 메뉴 초기화
         emptyWishList(); //위시리스트 초기화
       }
-      setAppear(false);
+      setAppear(true);
     },
     [auth.expiresDate],
   );
@@ -129,32 +130,28 @@ const App = ({
           <>
             <Header cntWish={cntWish} userId={auth.localId} />
             <Container>
-              {appear && (
-                <Modal>
-                  로그인을 연장하시겠습니까?
-                  <FlextCont>
-                    <Button
-                      kind="gray"
-                      onClick={() => onClickSessionHandler(false)}
-                    >
-                      취소
-                    </Button>
-                    <Button
-                      kind="dark"
-                      onClick={() => onClickSessionHandler(true)}
-                    >
-                      연장하기
-                    </Button>
-                  </FlextCont>
-                </Modal>
-              )}
-              {reLogin && (
-                <Modal onClickHandler={() => setReLogin(false)}>
-                  장시간 사용하지 않았습니다.
-                  <br />
-                  다시 로그인 해주세요.
-                </Modal>
-              )}
+              <Modal shown={appear}>
+                로그인을 연장하시겠습니까?
+                <FlextCont>
+                  <Button
+                    kind="gray"
+                    onClick={() => onClickSessionHandler(false)}
+                  >
+                    취소
+                  </Button>
+                  <Button
+                    kind="dark"
+                    onClick={() => onClickSessionHandler(true)}
+                  >
+                    연장하기
+                  </Button>
+                </FlextCont>
+              </Modal>
+              <Modal shown={reLogin} onClickHandler={() => setReLogin(false)}>
+                장시간 사용하지 않았습니다.
+                <br />
+                다시 로그인 해주세요.
+              </Modal>
               <Switch>
                 <Route
                   path="/"
