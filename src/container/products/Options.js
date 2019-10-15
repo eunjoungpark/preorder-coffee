@@ -25,9 +25,16 @@ import {
 
 const OptionGroup = styled.div`
   > ul > li {
+    position: relative;
     padding: 20px 10px;
-    &:nth-child(even) {
+    &:nth-child(odd) {
       background: #ededed;
+    }
+    .arrowR {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      margin-top: -8px;
     }
   }
   ul ul li {
@@ -55,14 +62,24 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
   useEffect(() => {
     if (options) {
       const price = options.price;
-      const shotTotal = options.shot.count * options.shot.extra;
-      const mochaTotal = options.syrup.mocha.count * options.syrup.mocha.extra;
+      const shotTotal =
+        options.shot.count > 0 ? options.shot.count * options.shot.extra : 0;
+      const mochaTotal =
+        options.syrup.mocha.count > 0
+          ? options.syrup.mocha.count * options.syrup.mocha.extra
+          : 0;
       const caramelTotal =
-        options.syrup.caramel.count * options.syrup.caramel.extra;
+        options.syrup.caramel.count > 0
+          ? options.syrup.caramel.count * options.syrup.caramel.extra
+          : 0;
       const hazelnutTotal =
-        options.syrup.hazelnut.count * options.syrup.hazelnut.extra;
+        options.syrup.hazelnut.count > 0
+          ? options.syrup.hazelnut.count * options.syrup.hazelnut.extra
+          : 0;
       const vanillaTotal =
-        options.syrup.vanilla.count * options.syrup.vanilla.extra;
+        options.syrup.vanilla.count > 0
+          ? options.syrup.vanilla.count * options.syrup.vanilla.extra
+          : 0;
       const total =
         (price +
           shotTotal +
@@ -102,6 +119,7 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
                       ) : null,
                     )}
                 </ul>
+                <MdKeyboardArrowRight className="arrowR" />
               </Link>
             </li>
             <li>
@@ -117,6 +135,7 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
                     ) : null;
                   })}
                 </ul>
+                <MdKeyboardArrowRight className="arrowR" />
               </Link>
             </li>
             {type === 'iced' ? (
@@ -130,6 +149,7 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
                       ) : null,
                     )}
                   </ul>
+                  <MdKeyboardArrowRight className="arrowR" />
                 </Link>
               </li>
             ) : null}
@@ -145,6 +165,7 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
                         ) : null,
                       )}
                     </ul>
+                    <MdKeyboardArrowRight className="arrowR" />
                   </Link>
                 </li>
               ) : (
@@ -164,6 +185,7 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
                           ) : null,
                         )}
                       </ul>
+                      <MdKeyboardArrowRight className="arrowR" />
                     </Link>
                   </li>
                   <li>
@@ -178,6 +200,7 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
                           ) : null,
                         )}
                       </ul>
+                      <MdKeyboardArrowRight className="arrowR" />
                     </Link>
                   </li>
                 </>

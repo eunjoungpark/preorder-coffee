@@ -10,7 +10,7 @@ import { emptyWishList } from '../../store/wish';
 import { emptyMenu } from '../../store/mymenu';
 const SideNav = styled.nav`
     position : fixed;
-    top:80px;
+    top:60px;
     left:0;
     bottom:0;
     width : 80%;

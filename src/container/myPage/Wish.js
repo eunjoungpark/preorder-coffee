@@ -9,7 +9,7 @@ import Loading from '../../components/loading/Loading';
 import Button from '../../components/form/button/Button';
 import Modal from '../../components/modal/Modal';
 import { MdClose } from 'react-icons/md';
-import { commas } from '../../libs/util';
+import { commas, authCheck } from '../../libs/util';
 import { types, cups } from '../../store/options';
 import {
   updateWishList,
@@ -52,14 +52,16 @@ const WishWrap = styled.div`
       }
       .store {
         text-align: center;
+        line-height: 1.5;
         a {
           display: inline-block;
-          padding: 5px;
+          padding: 3px 5px;
           margin: -5px 0 0 10px;
           font-size: 14px;
           vertical-align: middle;
           border-radius: 3px;
           background-color: #d9b391;
+          line-height: 1;
         }
       }
     }
@@ -130,9 +132,11 @@ const Wish = ({
   const [modalMsg, setModalMsg] = useState('');
   const [alertModal, setAlertModal] = useState(true);
 
-  useEffect(() => {
+  const onCheckAuthHandler = useCallback(() => {
     if (auth.localId === null) {
-      history.push('/');
+      setAlertModal(false);
+      setModalMsg('로그인 먼저해주세요.');
+      return;
     }
   }, [auth.localId]);
 
@@ -155,41 +159,51 @@ const Wish = ({
   }, [wish]);
 
   useEffect(() => {
+    if (loadingAddOrder === false) {
+      onCheckAuthHandler();
+      Object.keys(wish).forEach(w => {
+        if (wish[w].checked === true) {
+          removeWish({
+            token: auth.idToken,
+            userId: auth.localId,
+            id: w,
+          });
+        }
+      });
+    }
+  }, [loadingAddOrder]);
+
+  //로딩상태 언마운트시 비움처리
+  useEffect(() => {
     return () => emptyLoading();
   }, []);
 
   //전체 선택 토글
   const onClickCheckHandler = useCallback(() => {
-    if (auth.localId === null) {
-      setModalMsg('로그인 먼저해주세요.');
-    } else {
-      updateWishList({
-        token: auth.idToken,
-        userId: auth.localId,
-        wish: produce(wish, draft => {
-          Object.keys(draft).forEach(w => {
-            draft[w].checked = !allCheck;
-          });
-        }),
-      });
-      setAllCheck(!allCheck);
-    }
+    onCheckAuthHandler();
+    updateWishList({
+      token: auth.idToken,
+      userId: auth.localId,
+      wish: produce(wish, draft => {
+        Object.keys(draft).forEach(w => {
+          draft[w].checked = !allCheck;
+        });
+      }),
+    });
+    setAllCheck(!allCheck);
   }, [wish, allCheck]);
 
   //결제할 항목 토글
   const onCheckHandler = useCallback((id, checked) => {
-    if (auth.localId === null) {
-      setModalMsg('로그인 먼저해주세요.');
-    } else {
-      checkedWish({
-        token: auth.idToken,
-        userId: auth.localId,
-        id,
-        wish: produce(wish[id], draft => {
-          draft.checked = !checked;
-        }),
-      });
-    }
+    onCheckAuthHandler();
+    checkedWish({
+      token: auth.idToken,
+      userId: auth.localId,
+      id,
+      wish: produce(wish[id], draft => {
+        draft.checked = !checked;
+      }),
+    });
   }, []);
 
   //항목삭제
@@ -203,10 +217,8 @@ const Wish = ({
 
   //주문 추가
   const onAddOrderHandler = useCallback(() => {
-    if (auth.localId === null) {
-      setAlertModal(false);
-      setModalMsg('로그인 먼저해주세요.');
-    } else if (!selected) {
+    onCheckAuthHandler();
+    if (!selected) {
       setAlertModal(false);
       setModalMsg('주문하실 매장을 선택해주세요.');
     } else {
@@ -251,13 +263,19 @@ const Wish = ({
             checked={allCheck}
             className="allChk"
           />
+          {/* 모든 통신시 로딩바 노출 */}
           {(loadingWish || loadingRemoveWish || loadingAddOrder) && <Loading />}
-          {loadingRemoveWish === false && <Modal>삭제되었습니다.</Modal>}
-          {loadingAddOrder === false && (
+          {/* 주문시 삭제되는 경우에는 알럿 비노출 */}
+          {loadingRemoveWish === false && loadingAddOrder !== false && (
+            <Modal>삭제되었습니다.</Modal>
+          )}
+          {/* 주문 완료시 알럿 노출 */}
+          {loadingAddOrder === false && loadingRemoveWish === false && (
             <Modal onClickHandler={onClickCompleteHandler}>
               주문 완료했습니다.
             </Modal>
           )}
+          {/* 기타 알럿노출 */}
           <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
             {modalMsg}
           </Modal>

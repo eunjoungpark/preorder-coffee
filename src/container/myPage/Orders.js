@@ -89,8 +89,11 @@ const Orders = ({ auth, order, history, initOrderList, loadingOrder }) => {
                       </p>
                     </td>
                     <td>{order[o].store.name}</td>
-                    <td className="date">{`${date.getFullYear()}.${date.getMonth() +
-                      1}.${date.getDate()}`}</td>
+                    <td className="date">
+                      {`${date.getFullYear()}.${date.getMonth() +
+                        1}.${date.getDate()}`}{' '}
+                      {`${date.getHours()} : ${date.getMinutes()} : ${date.getMilliseconds()}`}
+                    </td>
                   </tr>
                 );
               })}

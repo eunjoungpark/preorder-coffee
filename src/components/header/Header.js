@@ -11,21 +11,21 @@ const HeadStyle = styled.header`
   top: 0;
   left: 0;
   width: 100%;
-  height: 80px;
-  padding: 15px;
+  height: 60px;
+  padding:10px 15px;
   background-color: #3e4759;
   text-align: center;
   border-bottom: 1px solid #000;
   a.logo {
     display: inline-block;
-    line-height: 46px;
-    font-size: 30px;
+    line-height: 28px;
+    font-size: 24px;
     color: #fff;
   }
   a.cart {
     position: absolute;
-    top: 25px;
-    right: 20px;
+    top: 20px;
+    right: 24px;
     font-size: 30px;
     color: #fff;
     .count {
@@ -39,12 +39,10 @@ const HeadStyle = styled.header`
       padding: 5px 10px;
       line-height: 1;
       overflow:hidden;
+      zoom:0;
       &.isAni {
-        padding:10px 15px;
-        top: -18px;
-        right: -16px;
-        font-size:20px;
-        transition:all 0.1s ease;
+        zoom:1.5;
+        transition:all 0.2s ease;
        }
       }
     }
@@ -54,10 +52,10 @@ const HeadStyle = styled.header`
 
 const TriggerNav = styled.button`
   position: absolute;
-  left: 5px;
-  top: 15px;
-  width: 50px;
-  height: 50px;
+  top: 10px;
+  left: 10px;
+  width: 40px;
+  height: 40px;
   vertical-align: top;
   .open {
     padding:0 6px;
@@ -66,7 +64,7 @@ const TriggerNav = styled.button`
     span {
       display: block;
       height: 3px;
-      margin: 8px 0;
+      margin: 6px 0;
       background-color: #fff;
     }
   }
@@ -77,7 +75,7 @@ const TriggerNav = styled.button`
     width:0;
     height:0;
     color:#fff;
-    font-size:50px
+    font-size:40px
     transform: rotate(90deg);
     opacity: 0;
     transition: all 1s ease;
@@ -99,9 +97,9 @@ const TriggerNav = styled.button`
 `;
 
 const LogoImg = styled.img`
-  width: 35px;
+  width: 28px;
   margin-right: 20px;
-  vertical-align: top;
+  vertical-align: middle;
 `;
 
 const Header = ({ cntWish, userId }) => {

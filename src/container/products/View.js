@@ -193,14 +193,24 @@ const View = ({
       const price = options.size
         ? product.price + product.sizes[options.size].extra
         : product.price + product.sizes[s].extra;
-      const shotTotal = options.shot.count * options.shot.extra;
-      const mochaTotal = options.syrup.mocha.count * options.syrup.mocha.extra;
+      const shotTotal =
+        options.shot.count > 0 ? options.shot.count * options.shot.extra : 0;
+      const mochaTotal =
+        options.syrup.mocha.count > 0
+          ? options.syrup.mocha.count * options.syrup.mocha.extra
+          : 0;
       const caramelTotal =
-        options.syrup.caramel.count * options.syrup.caramel.extra;
+        options.syrup.caramel.count > 0
+          ? options.syrup.caramel.count * options.syrup.caramel.extra
+          : 0;
       const hazelnutTotal =
-        options.syrup.hazelnut.count * options.syrup.hazelnut.extra;
+        options.syrup.hazelnut.count > 0
+          ? options.syrup.hazelnut.count * options.syrup.hazelnut.extra
+          : 0;
       const vanillaTotal =
-        options.syrup.vanilla.count * options.syrup.vanilla.extra;
+        options.syrup.vanilla.count > 0
+          ? options.syrup.vanilla.count * options.syrup.vanilla.extra
+          : 0;
 
       onSetTotal(
         (price +

@@ -109,9 +109,11 @@ const App = ({
 
       if (expectExpire > 0 && result) {
         accessAuth(600000); //유효시간 연장(10분)
-      } else if (expectExpire < 0 && result) {
-        setReLogin(false);
       } else {
+        if (expectExpire < 0 && result) {
+          setReLogin(false);
+        }
+
         removeAuth(); //로그아웃
         initOptions(); //옵션 초기화
         emptyMenu(); //나만의 메뉴 초기화
