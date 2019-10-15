@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const BackdropWrap = styled.div`
@@ -14,6 +15,10 @@ const BackdropWrap = styled.div`
 
 const Backdrop = ({ onClick }) => {
   return <BackdropWrap onClick={onClick} />;
+};
+
+Backdrop.propTypes = {
+  onClick: PropTypes.func,
 };
 
 export default React.memo(Backdrop);

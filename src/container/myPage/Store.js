@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Contents, PageTitle } from '../../components/common';
 import { MdHome } from 'react-icons/md';
@@ -57,16 +57,8 @@ const StoreWrap = styled.div`
   }
 `;
 
-const Store = ({
-  history,
-  store,
-  initStore,
-  setStore,
-  loadingStore,
-  errorStore,
-}) => {
+const Store = ({ history, store, initStore, setStore, loadingStore }) => {
   const [result, setResult] = useState([]);
-  // const history = useHistory();
   //지점 Data가져오기
   useEffect(() => {
     initStore();
@@ -142,6 +134,13 @@ const Store = ({
       </StoreWrap>
     </Contents>
   );
+};
+
+Store.propTypes = {
+  store: PropTypes.object.isRequired,
+  initStore: PropTypes.func.isRequired,
+  setStore: PropTypes.func.isRequired,
+  loadingStore: PropTypes.bool,
 };
 
 const mapStateToProps = ({ store, loadings }) => ({

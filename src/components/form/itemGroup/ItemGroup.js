@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 /* Form */
@@ -24,6 +25,11 @@ const ItemGroup = ({ children, hidden, label }) => {
       <div className="count">{children}</div>
     </ItemGroupStyle>
   );
+};
+ItemGroup.propTypes = {
+  children: PropTypes.node,
+  hidden: PropTypes.bool,
+  label: PropTypes.string,
 };
 
 export default React.memo(ItemGroup);

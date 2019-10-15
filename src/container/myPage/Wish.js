@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import produce from 'immer';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Contents, PageTitle, FlextCont } from '../../components/common';
 import Checkbox from '../../components/form/checkbox/Checkbox';
@@ -9,7 +10,7 @@ import Loading from '../../components/loading/Loading';
 import Button from '../../components/form/button/Button';
 import Modal from '../../components/modal/Modal';
 import { MdClose } from 'react-icons/md';
-import { commas, authCheck } from '../../libs/util';
+import { commas } from '../../libs/util';
 import { types, cups } from '../../store/options';
 import {
   updateWishList,
@@ -63,6 +64,9 @@ const WishWrap = styled.div`
           background-color: #d9b391;
           line-height: 1;
         }
+      }
+      button {
+        margin-top: 20px;
       }
     }
   }
@@ -132,14 +136,6 @@ const Wish = ({
   const [modalMsg, setModalMsg] = useState('');
   const [alertModal, setAlertModal] = useState(true);
 
-  const onCheckAuthHandler = useCallback(() => {
-    if (auth.localId === null) {
-      setAlertModal(false);
-      setModalMsg('로그인 먼저해주세요.');
-      return;
-    }
-  }, [auth.localId]);
-
   useEffect(() => {
     let s = 0, //음료합계
       c = 0; //음료수
@@ -160,7 +156,6 @@ const Wish = ({
 
   useEffect(() => {
     if (loadingAddOrder === false) {
-      onCheckAuthHandler();
       Object.keys(wish).forEach(w => {
         if (wish[w].checked === true) {
           removeWish({
@@ -180,7 +175,6 @@ const Wish = ({
 
   //전체 선택 토글
   const onClickCheckHandler = useCallback(() => {
-    onCheckAuthHandler();
     updateWishList({
       token: auth.idToken,
       userId: auth.localId,
@@ -195,7 +189,6 @@ const Wish = ({
 
   //결제할 항목 토글
   const onCheckHandler = useCallback((id, checked) => {
-    onCheckAuthHandler();
     checkedWish({
       token: auth.idToken,
       userId: auth.localId,
@@ -217,7 +210,6 @@ const Wish = ({
 
   //주문 추가
   const onAddOrderHandler = useCallback(() => {
-    onCheckAuthHandler();
     if (!selected) {
       setAlertModal(false);
       setModalMsg('주문하실 매장을 선택해주세요.');
@@ -421,6 +413,20 @@ const Wish = ({
       </WishWrap>
     </Contents>
   );
+};
+
+Wish.propTypes = {
+  wish: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
+  selected: PropTypes.object,
+  addOrderList: PropTypes.func.isRequired,
+  updateWishList: PropTypes.func.isRequired,
+  checkedWish: PropTypes.func.isRequired,
+  removeWish: PropTypes.func.isRequired,
+  emptyLoading: PropTypes.func.isRequired,
+  loadingWish: PropTypes.bool,
+  loadingRemoveWish: PropTypes.bool,
+  loadingAddOrder: PropTypes.bool,
 };
 
 const mapStateToProps = ({ wish, auth, store, loadings }) => ({

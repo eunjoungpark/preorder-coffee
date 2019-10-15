@@ -1,4 +1,5 @@
 import React, { useRef, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Backdrop from '../backdrop/Backdrop';
 
@@ -47,6 +48,12 @@ const Modal = ({ children, shown, onClickHandler }) => {
       </ModalContents>
     </>
   );
+};
+
+Modal.propTypes = {
+  children: PropTypes.node,
+  shown: PropTypes.bool,
+  onClickHandler: PropTypes.func,
 };
 
 export default React.memo(Modal);

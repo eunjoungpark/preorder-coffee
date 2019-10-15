@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import produce from 'immer';
+import PropTypes from 'prop-types';
 import qs from '../../libs/qs';
 import Modal from '../../components/modal/Modal';
 import {
@@ -507,6 +508,18 @@ const Detail = ({
       </Contents>
     )
   );
+};
+
+Detail.propTypes = {
+  product: PropTypes.object.isRequired,
+  options: PropTypes.object.isRequired,
+  onSetShot: PropTypes.func.isRequired,
+  onSetIce: PropTypes.func.isRequired,
+  onSetMilk: PropTypes.func.isRequired,
+  onSetWhipping: PropTypes.func.isRequired,
+  onSetSyrup: PropTypes.func.isRequired,
+  onSetWater: PropTypes.func.isRequired,
+  onSetMessages: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ product, options }) => ({

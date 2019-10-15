@@ -1,7 +1,9 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { commas } from '../../libs/util';
 import Button from '../../components/form/button/Button';
 import Modal from '../../components/modal/Modal';
 import Loading from '../../components/loading/Loading';
@@ -12,7 +14,6 @@ import { types, cups } from '../../store/options';
 import { setMenuCount } from '../../store/mymenu';
 import { addOrderList, ADD_ORDER_LIST } from '../../store/order';
 import { emptyLoading } from '../../store/loadings';
-import { commas } from '../../libs/util';
 
 const ItemBase = styled.div`
   margin: 0 5px;
@@ -61,6 +62,7 @@ const PayBox = styled.div`
   border-top:1px dashed #cdcdcd;
     .store {
       text-align: center;
+      line-height:1.5;
       a {
         display: inline-block;
           padding: 5px;
@@ -69,6 +71,7 @@ const PayBox = styled.div`
           vertical-align: middle;
           border-radius: 3px;
           background-color: #d9b391;
+          line-height:1;
       }
     }
   }
@@ -79,12 +82,12 @@ const MAX = 20;
 const MyMenuPay = ({
   auth,
   menu,
-  history,
   selected,
   setMenuCount,
   addOrderList,
   loadingAddOrder,
   emptyLoading,
+  history,
 }) => {
   const [modalMsg, setModalMsg] = useState('');
   const [alertModal, setAlertModal] = useState(true);
@@ -131,10 +134,7 @@ const MyMenuPay = ({
 
   //주문 추가
   const onAddOrderHandler = useCallback(() => {
-    if (auth.localId === null) {
-      setAlertModal(false);
-      setModalMsg('로그인 먼저해주세요.');
-    } else if (!selected) {
+    if (!selected) {
       setAlertModal(false);
       setModalMsg('주문하실 매장을 선택해주세요.');
     } else {
@@ -238,6 +238,16 @@ const MyMenuPay = ({
       </Contents>
     )
   );
+};
+
+MyMenuPay.propTypes = {
+  auth: PropTypes.object,
+  menu: PropTypes.object,
+  selected: PropTypes.object,
+  setMenuCount: PropTypes.func,
+  addOrderList: PropTypes.func,
+  emptyLoading: PropTypes.func,
+  loadingAddOrder: PropTypes.bool,
 };
 
 const mapStateToProps = ({ auth, mymenu, store, loadings }) => ({

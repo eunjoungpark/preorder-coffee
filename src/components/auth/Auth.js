@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import produce from 'immer';
 import Modal from '../modal/Modal';
@@ -43,12 +44,12 @@ const Form = styled.form`
 `;
 
 const AuthModal = styled.div`
-  padding: 30 0;
   text-align: center;
   &.error {
     color: #f00;
   }
   button {
+    margin: 15px 0 0 0 !important;
     font-size: 14px;
   }
 `;
@@ -217,6 +218,16 @@ const Auth = ({
       </Button>
     </Form>
   );
+};
+
+Auth.propTypes = {
+  auth: PropTypes.object,
+  error: PropTypes.object,
+  initAuth: PropTypes.func.isRequired,
+  initSuccess: PropTypes.func.isRequired,
+  emptyMessage: PropTypes.func.isRequired,
+  emptyLoading: PropTypes.func.isRequired,
+  type: PropTypes.string,
 };
 
 const mapStateToProps = ({ auth, loadings, error }) => ({

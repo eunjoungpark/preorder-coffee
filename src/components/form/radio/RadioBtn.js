@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
 
 const theme = {
@@ -31,16 +32,7 @@ const Radio = styled.span`
   }
 `;
 
-const RadioBtn = ({
-  type,
-  id,
-  name,
-  value,
-  children,
-  checked,
-  clickHander,
-  onClick,
-}) => {
+const RadioBtn = ({ type, id, name, value, children, checked, onClick }) => {
   const thisTheme = theme[type];
   return (
     <ThemeProvider theme={thisTheme}>
@@ -58,6 +50,16 @@ const RadioBtn = ({
       </Radio>
     </ThemeProvider>
   );
+};
+
+RadioBtn.propTypes = {
+  type: PropTypes.string,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  value: PropTypes.string,
+  children: PropTypes.string,
+  checked: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default React.memo(RadioBtn);

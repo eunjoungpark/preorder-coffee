@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as productsImage from '../../images/products';
 import { Contents, PageTitle } from '../../components/common';
@@ -132,6 +133,13 @@ const List = ({ lists, initProduct, initOptions, onSetProduct }) => {
       </Contents>
     )
   );
+};
+
+List.propTypes = {
+  lists: PropTypes.object.isRequired,
+  initProduct: PropTypes.func.isRequired,
+  initOptions: PropTypes.func.isRequired,
+  onSetProduct: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = { initProduct, initOptions, onSetProduct };

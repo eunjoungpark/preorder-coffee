@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import qs from '../../libs/qs';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { MdKeyboardArrowRight } from 'react-icons/md';
+import PropTypes from 'prop-types';
 import { commas } from '../../libs/util';
+import styled from 'styled-components';
+import { MdKeyboardArrowRight } from 'react-icons/md';
 
 import {
   Contents,
@@ -216,6 +217,12 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
       </Contents>
     )
   );
+};
+
+Option.propTypes = {
+  product: PropTypes.object.isRequired,
+  options: PropTypes.object.isRequired,
+  onSetTotal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ product, options }) => ({

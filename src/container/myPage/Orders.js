@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { commas } from '../../libs/util';
 import { Contents, PageTitle } from '../../components/common';
 import Loading from '../../components/loading/Loading';
 import { initOrderList, ORDER_LIST } from '../../store/order';
-import { commas } from '../../libs/util';
 
 const OrderWrap = styled.div`
   table {
@@ -43,7 +44,7 @@ const EmptyBox = styled.div`
   text-align: center;
   font-size: 16px;
 `;
-const Orders = ({ auth, order, history, initOrderList, loadingOrder }) => {
+const Orders = ({ auth, order, initOrderList, loadingOrder, history }) => {
   useEffect(() => {
     if (auth.localId) {
       initOrderList({
@@ -105,6 +106,13 @@ const Orders = ({ auth, order, history, initOrderList, loadingOrder }) => {
       )}
     </Contents>
   );
+};
+
+Orders.propTypes = {
+  auth: PropTypes.object.isRequired,
+  order: PropTypes.object.isRequired,
+  initOrderList: PropTypes.func.isRequired,
+  loadingOrder: PropTypes.bool,
 };
 
 const mapStateToProps = ({ auth, order, loadings }) => ({

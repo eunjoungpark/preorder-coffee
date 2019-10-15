@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 const CheckBox = styled.fieldset`
   position: relative;
@@ -48,5 +49,14 @@ const Checkbox = ({ id, label, checked, legend, className, onClick }) => {
       </label>
     </CheckBox>
   );
+};
+
+CheckBox.propTypes = {
+  id: PropTypes.string,
+  label: PropTypes.string,
+  legend: PropTypes.string,
+  checked: PropTypes.bool,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
 };
 export default React.memo(Checkbox);

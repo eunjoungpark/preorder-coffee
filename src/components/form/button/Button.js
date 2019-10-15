@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
 
 const theme = {
@@ -32,6 +33,14 @@ const Button = ({ type, kind, children, onClick, className }) => {
       </Btn>
     </ThemeProvider>
   );
+};
+
+Button.propTypes = {
+  kind: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  className: PropTypes.string,
+  children: PropTypes.node,
+  onClick: PropTypes.func,
 };
 
 export default React.memo(Button);

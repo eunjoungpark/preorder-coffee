@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import Loading from '../../components/loading/Loading';
@@ -170,6 +170,16 @@ const MyMemu = ({
       )}
     </>
   );
+};
+
+MyMemu.propTypes = {
+  auth: PropTypes.object.isRequired,
+  menuList: PropTypes.object.isRequired,
+  emptyLoading: PropTypes.func.isRequired,
+  removeMenu: PropTypes.func.isRequired,
+  setMenu: PropTypes.func.isRequired,
+  loadingRemoveMenu: PropTypes.bool,
+  loadingMenu: PropTypes.bool,
 };
 
 const mapStateToProps = ({ auth, mymenu, loadings }) => ({

@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { removeAuth } from '../../store/auth';
@@ -61,6 +62,11 @@ const Lnb = ({
         {localId && (
           <>
             <li>
+              <NavLink to="/" onClick={onChangePageHandler}>
+                홈
+              </NavLink>
+            </li>
+            <li>
               <NavLink to="/mymenu" onClick={onChangePageHandler}>
                 나만의 메뉴
               </NavLink>
@@ -94,6 +100,16 @@ const Lnb = ({
       </ul>
     </SideNav>
   );
+};
+
+Lnb.propTypes = {
+  localId: PropTypes.string,
+  isAni: PropTypes.bool,
+  onChangePageHandler: PropTypes.func,
+  removeAuth: PropTypes.func,
+  initOptions: PropTypes.func,
+  emptyWishList: PropTypes.func,
+  emptyMenu: PropTypes.func,
 };
 
 const mapStateToProps = ({ auth }) => ({

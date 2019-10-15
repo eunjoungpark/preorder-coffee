@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import qs from '../../libs/qs';
 import produce from 'immer';
+import PropTypes from 'prop-types';
 import { MdSend } from 'react-icons/md';
 import styled from 'styled-components';
 import Button from '../../components/form/button/Button';
@@ -493,6 +494,27 @@ const View = ({
       </Contents>
     )
   );
+};
+
+View.propTypes = {
+  product: PropTypes.object,
+  options: PropTypes.object,
+  auth: PropTypes.object,
+  onSetProduct: PropTypes.func.isRequired,
+  onSetSyrup: PropTypes.func.isRequired,
+  onSetCount: PropTypes.func.isRequired,
+  onSetCup: PropTypes.func.isRequired,
+  onSetSize: PropTypes.func.isRequired,
+  onSetTotal: PropTypes.func.isRequired,
+  onSetShot: PropTypes.func.isRequired,
+  onSetPrice: PropTypes.func.isRequired,
+  onSetType: PropTypes.func.isRequired,
+  onSetMessages: PropTypes.func.isRequired,
+  addWish: PropTypes.func.isRequired,
+  addMenu: PropTypes.func.isRequired,
+  emptyLoading: PropTypes.func,
+  loadingAddWish: PropTypes.bool,
+  loadingAddMenu: PropTypes.bool,
 };
 
 const mapStateToProps = ({ auth, product, options, loadings }) => ({

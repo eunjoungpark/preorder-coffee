@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Backdrop from '../../components/backdrop/Backdrop';
 import Lnb from '../../components/nav/SideNav';
@@ -18,24 +19,24 @@ const HeadStyle = styled.header`
   border-bottom: 1px solid #000;
   a.logo {
     display: inline-block;
-    line-height: 28px;
+    line-height: 36px;
     font-size: 24px;
     color: #fff;
   }
   a.cart {
     position: absolute;
-    top: 20px;
+    top: 15px;
     right: 24px;
     font-size: 30px;
     color: #fff;
     .count {
       position: absolute;
-      top: -15px;
+      top: -10px;
       right: -15px;
       padding:0;
       background-color: #8c6046;
       border-radius: 15px;
-      font-size: 18px;
+      font-size: 16px;
       padding: 5px 10px;
       line-height: 1;
       overflow:hidden;
@@ -99,7 +100,7 @@ const TriggerNav = styled.button`
 const LogoImg = styled.img`
   width: 28px;
   margin-right: 20px;
-  vertical-align: middle;
+  vertical-align: top;
 `;
 
 const Header = ({ cntWish, userId }) => {
@@ -139,7 +140,7 @@ const Header = ({ cntWish, userId }) => {
           </Link>
         </h1>
         {userId && (
-          <Link to="/wish" className="cart">
+          <Link to="/wish" className="cart" onClick={onChangePageHandler}>
             <MdShoppingCart />
             {cntWish > 0 && (
               <span className="count" ref={wishRef}>
@@ -153,6 +154,11 @@ const Header = ({ cntWish, userId }) => {
       <Lnb isAni={isAni} onChangePageHandler={onChangePageHandler} />
     </>
   );
+};
+
+Header.propTypes = {
+  cntWish: PropTypes.number,
+  userId: PropTypes.string,
 };
 
 export default React.memo(Header);

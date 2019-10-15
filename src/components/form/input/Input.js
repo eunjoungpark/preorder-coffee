@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const InputBox = styled.fieldset`
@@ -31,7 +32,7 @@ const Input = ({
         {label}
       </label>
       <input
-        type={type}
+        type={type ? type : 'text'}
         id={id}
         placeholder={placeholder}
         onChange={changed}
@@ -40,6 +41,17 @@ const Input = ({
       />
     </InputBox>
   );
+};
+
+Input.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  value: PropTypes.string,
+  placeholder: PropTypes.string,
+  changed: PropTypes.func,
+  className: PropTypes.string,
+  hidden: PropTypes.bool,
 };
 
 export default React.memo(Input);

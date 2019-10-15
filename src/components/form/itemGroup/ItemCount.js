@@ -1,6 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
 import Button from '../button/Button';
 
 const ItemCountStyle = styled.fieldset`
@@ -29,8 +29,8 @@ const ItemCount = ({
 }) => {
   return (
     <ItemCountStyle>
-      <input type="hidden" name={name} value={count} />
       <legend className={hidden ? 'hidden' : 'label'}>{children}</legend>
+      <input type="hidden" name={name} value={count} />
       <div className="count">
         <Button kind="default" onClick={onDecrease}>
           -
@@ -44,4 +44,12 @@ const ItemCount = ({
   );
 };
 
+ItemCount.propTypes = {
+  children: PropTypes.string,
+  hidden: PropTypes.string,
+  count: PropTypes.number,
+  name: PropTypes.string,
+  onDecrease: PropTypes.func,
+  onIncrease: PropTypes.func,
+};
 export default React.memo(ItemCount);
