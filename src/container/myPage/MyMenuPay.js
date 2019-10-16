@@ -194,7 +194,7 @@ const MyMenuPay = ({
           <ItemBase className="clear">
             <div className="itemImg">
               <img
-                src={productsImage[menu.image]}
+                src={menu.image}
                 width="150"
                 alt={menu.nickname !== '' ? menu.nickname : menu.ko}
               />

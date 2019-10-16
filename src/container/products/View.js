@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useRef,
-} from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import qs from '../../libs/qs';
@@ -27,7 +21,6 @@ import ItemCount from '../../components/form/itemGroup/ItemCount';
 import ItemGroup from '../../components/form/itemGroup/ItemGroup';
 import Modal from '../../components/modal/Modal';
 import Loading from '../../components/loading/Loading';
-import * as productsImage from '../../images/products';
 import { commas } from '../../libs/util';
 import { onSetProduct } from '../../store/product';
 import {
@@ -368,7 +361,7 @@ const View = ({
           en: product.en,
           total: options.total / options.count,
           count: 1,
-          image: `${type}_${kind}`,
+          image: `/images/coffee/${type}/${kind}.jpg`,
         },
       });
       setShown(!shown);
@@ -390,7 +383,7 @@ const View = ({
             <figure>
               <div className="itemImg">
                 <img
-                  src={productsImage[`${type}_${kind}`]}
+                  src={`/images/coffee/${type}/${kind}.jpg`}
                   width="150"
                   alt={product.ko}
                 />

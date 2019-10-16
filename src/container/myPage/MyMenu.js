@@ -7,7 +7,6 @@ import Loading from '../../components/loading/Loading';
 import Modal from '../../components/modal/Modal';
 import Button from '../../components/form/button/Button';
 import { Contents, PageTitle } from '../../components/common';
-import * as productsImage from '../../images/products';
 import { emptyLoading } from '../../store/loadings';
 import {
   removeMenu,
@@ -153,7 +152,7 @@ const MyMemu = ({
                     <p className="menuImg">
                       <img
                         width="100"
-                        src={productsImage[menuList[m].image]}
+                        src={[menuList[m].image]}
                         alt={
                           menuList[m].nickname !== ''
                             ? menuList[m].nickname

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import * as productsImage from '../../images/products';
 import { Contents, PageTitle } from '../../components/common';
 import { initProduct, onSetProduct } from '../../store/product';
 import { initOptions } from '../../store/options';
@@ -102,7 +101,7 @@ const List = ({ lists, initProduct, initOptions, onSetProduct }) => {
                 <Link to={url} onClick={() => onSetProductHandler('hot', kind)}>
                   <figure>
                     <img
-                      src={productsImage[`hot_${kind}`]}
+                      src={`/images/coffee/hot/${kind}.jpg`}
                       width="180"
                       alt=""
                     />
@@ -128,7 +127,7 @@ const List = ({ lists, initProduct, initOptions, onSetProduct }) => {
                   onClick={() => onSetProductHandler('iced', kind)}
                 >
                   <figure>
-                    <img src={productsImage[`iced_${kind}`]} alt="" />
+                    <img src={`/images/coffee/iced/${kind}.jpg`} alt="" />
                     <figcaption>
                       <p className="en">{icedItem.en}</p>
                       <p className="ko">{icedItem.ko}</p>
