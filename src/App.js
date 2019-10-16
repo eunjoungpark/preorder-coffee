@@ -43,7 +43,7 @@ const App = ({
 }) => {
   const [cntWish, setCntWish] = useState(0);
   const [appear, setAppear] = useState(false);
-  const [reLogin, setReLogin] = useState(true);
+  const [alertModal, setAlertModal] = useState(true);
   const [modalMsg, setModalMsg] = useState('');
 
   //리프래시에도 로그인상태 유지
@@ -113,7 +113,7 @@ const App = ({
         accessAuth(600000); //유효시간 연장(10분)
       } else {
         if (expectExpire < 0 && result) {
-          setReLogin(false);
+          setAlertModal(false);
           setModalMsg('장시간 사용하지 않았습니다. 다시 로그인 해주세요.');
         }
 
@@ -127,10 +127,10 @@ const App = ({
     [auth.expiresDate],
   );
 
-  const onClickReLoginHandler = useCallback(() => {
-    setReLogin(false);
+  const onClickAlertHandler = useCallback(() => {
+    setAlertModal(!alertModal);
     setModalMsg('');
-  }, []);
+  }, [alertModal]);
 
   return (
     <Wrapper>
@@ -168,10 +168,10 @@ const App = ({
                   </ModalContents>
                 </AriaModal>
               )}
-              <Modal shown={reLogin} onClickHandler={onClickReLoginHandler}>
+              <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
                 {modalMsg}
                 <br />
-                <Button kind="default" onClick={onClickReLoginHandler}>
+                <Button kind="default" onClick={onClickAlertHandler}>
                   확인
                 </Button>
               </Modal>
