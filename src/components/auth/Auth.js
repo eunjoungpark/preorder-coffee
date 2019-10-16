@@ -147,6 +147,10 @@ const Auth = ({
     [formValidation],
   );
 
+  const onClickErrorHandler = useCallback(() => {
+    emptyMessage(SET_AUTH);
+  }, []);
+
   return auth.localId ? (
     auth.success ? (
       <Modal onClickHandler={onClickAuthHandler}>
@@ -164,12 +168,15 @@ const Auth = ({
   ) : (
     <Form onSubmit={onSubmitHandlerAccount}>
       {error && (
-        <Modal onClickHandler={() => emptyMessage(SET_AUTH)}>
+        <Modal onClickHandler={onClickErrorHandler} ariaLive="assertive">
           <AuthModal className="error">
             {MESSAGE[error.message]
               ? MESSAGE[error.message]
               : MESSAGE['TOO_MANY_ATTEMPTS_TRY_LATER']}
           </AuthModal>
+          <Button kind="default" onClick={onClickErrorHandler}>
+            확인
+          </Button>
         </Modal>
       )}
 
