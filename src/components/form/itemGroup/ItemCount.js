@@ -35,7 +35,9 @@ const ItemCount = ({
         <Button kind="default" onClick={onDecrease} ariaLabel="1만큼 수량감소">
           <span aria-hidden="true">-</span>
         </Button>
-        <span className="quantity">{count}</span>
+        <span className="quantity" aria-label="수량">
+          {count}
+        </span>
         <Button kind="default" onClick={onIncrease} ariaLabel="1만큼 수량증가">
           <span aria-hidden="true">+</span>
         </Button>
