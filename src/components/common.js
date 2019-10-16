@@ -19,7 +19,7 @@ export const ModalContents = styled.div`
   border-radius: 5px;
   transform: translate(-50%, -50%);
   background-color: #fff;
-  z-index: 100;
+  z-index: 12;
   line-height: 1.5;
   text-align: center;
   h1 {

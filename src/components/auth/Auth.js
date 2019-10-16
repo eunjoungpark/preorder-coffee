@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import qs from '../../libs/qs';
 import styled from 'styled-components';
 import produce from 'immer';
 import Modal from '../modal/Modal';
@@ -85,7 +86,9 @@ const Auth = ({
   auth,
   error,
   history,
+  location,
 }) => {
+  const { keep } = qs(location);
   const [formValidation, setFormValidation] = useState({
     email: {
       value: '',
@@ -105,7 +108,11 @@ const Auth = ({
 
   const onClickAuthHandler = useCallback(() => {
     initSuccess();
-    history.push('/');
+    if (keep) {
+      history.go(-1);
+    } else {
+      history.push('/');
+    }
   }, []);
 
   //이메일 유효성 검사

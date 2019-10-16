@@ -10,7 +10,7 @@ const BackdropWrap = styled.div`
   bottom: 0;
   background-color: #000;
   opacity: 0.5;
-  z-index: 98;
+  z-index: 11;
 `;
 
 const Backdrop = ({ onClick }) => {

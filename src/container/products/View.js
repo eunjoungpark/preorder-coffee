@@ -135,17 +135,18 @@ const View = ({
   loadingAddMenu,
   emptyLoading,
 }) => {
-  const { type, kind } = qs(location);
+  const { type, kind, keep } = qs(location);
   const s = kind === 'espresso' ? 'Solo' : 'Tall';
   const [hasMsg, setHasMsg] = useState(false);
   const [shown, setShown] = useState(false);
   const [alertModal, setAlertModal] = useState(true);
+  const [loginModal, setLoginModal] = useState(true);
   const [modalMsg, setModalMsg] = useState('');
   const [menuName, setMenuName] = useState('');
 
   //선택한 음료 설정
   useEffect(() => {
-    if (!product) {
+    if (!product && !keep) {
       onSetProduct({ type, kind });
     }
   }, []);
@@ -306,8 +307,7 @@ const View = ({
   // 나만의 메뉴등록 모달
   const onClickShownHandler = useCallback(() => {
     if (auth.localId === null) {
-      setAlertModal(false);
-      setModalMsg('로그인 먼저해주세요.');
+      setLoginModal(false);
     } else {
       setShown(!shown);
     }
@@ -316,8 +316,7 @@ const View = ({
   //위시 리스트 담기
   const onClickWishhandler = useCallback(() => {
     if (auth.localId === null) {
-      setAlertModal(false);
-      setModalMsg('로그인 먼저해주세요.');
+      setLoginModal(false);
     } else {
       for (let i = 0; i < options.count; i++) {
         addWish({
@@ -347,8 +346,7 @@ const View = ({
   //나만의 음료등록
   const onClickMyMenuHandler = useCallback(() => {
     if (auth.localId === null) {
-      setAlertModal(false);
-      setModalMsg('로그인 먼저해주세요.');
+      setLoginModal(false);
     } else {
       addMenu({
         token: auth.idToken,
@@ -372,6 +370,11 @@ const View = ({
     setAlertModal(!alertModal);
     setModalMsg('');
   }, [alertModal]);
+
+  const onClickLoginHandler = useCallback(() => {
+    setLoginModal(!loginModal);
+    history.push(`/signin?type=${type}&kind=${kind}&keep=true`);
+  }, [loginModal]);
 
   return (
     product &&
@@ -479,12 +482,23 @@ const View = ({
         </OptionGroup>
         {(loadingAddWish || loadingAddMenu) && <Loading />}
 
-        {/* alert메시지 */}
+        {/* 기타 모달 */}
 
         <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
           {modalMsg}
           <br />
           <Button kind="default" onClick={onClickAlertHandler}>
+            확인
+          </Button>
+        </Modal>
+
+        {/* 로그인 모달 */}
+        <Modal shown={loginModal} onClickHandler={onClickLoginHandler}>
+          로그인 먼저해주세요.
+          <br />
+          로그인 페이지로 이동합니다.
+          <br />
+          <Button kind="default" onClick={onClickLoginHandler}>
             확인
           </Button>
         </Modal>

@@ -140,11 +140,33 @@ const App = ({
           <>
             <Header cntWish={cntWish} userId={auth.localId} />
             <Container>
+              <Switch>
+                <Route
+                  path="/"
+                  exact
+                  render={prop => <List {...prop} lists={lists} />}
+                />
+                <Route
+                  path="/view"
+                  render={prop => <View {...prop} lists={lists} />}
+                />
+                <Route path="/options" component={Options} />
+                <Route path="/details" component={Details} />
+                <Route path="/mymenu" exact component={MyMenu} />
+                <Route path="/mymenu/pay" component={MyMenuPay} />
+                <Route path="/orders" component={Orders} />
+                <Route path="/wish" component={Wish} />
+                <Route path="/store" component={Store} />
+                <Route path="/signup" component={SignUp} />
+                <Route path="/signin" component={SignIn} />
+                <Redirect to="/" />
+              </Switch>
               {appear && (
                 <AriaModal
                   onExit={() => onClickSessionHandler(false)}
                   titleId="auth_delay_modal"
                 >
+                  {/* 로그인 연장 모달 */}
                   <ModalContents>
                     <h1 id="auth_delay_modal">로그인을 연장하시겠습니까?</h1>
                     <p>
@@ -168,6 +190,7 @@ const App = ({
                   </ModalContents>
                 </AriaModal>
               )}
+              {/* 기타 모달 */}
               <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
                 {modalMsg}
                 <br />
@@ -175,27 +198,6 @@ const App = ({
                   확인
                 </Button>
               </Modal>
-              <Switch>
-                <Route
-                  path="/"
-                  exact
-                  render={prop => <List {...prop} lists={lists} />}
-                />
-                <Route
-                  path="/view"
-                  render={prop => <View {...prop} lists={lists} />}
-                />
-                <Route path="/options" component={Options} />
-                <Route path="/details" component={Details} />
-                <Route path="/mymenu" exact component={MyMenu} />
-                <Route path="/mymenu/pay" component={MyMenuPay} />
-                <Route path="/orders" component={Orders} />
-                <Route path="/wish" component={Wish} />
-                <Route path="/store" component={Store} />
-                <Route path="/signup" component={SignUp} />
-                <Route path="/signin" component={SignIn} />
-                <Redirect to="/" />
-              </Switch>
             </Container>
           </>
         )}

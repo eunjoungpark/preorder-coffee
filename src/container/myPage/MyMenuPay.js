@@ -9,7 +9,6 @@ import Modal from '../../components/modal/Modal';
 import Loading from '../../components/loading/Loading';
 import { Contents, PageTitle, FlextCont } from '../../components/common';
 import ItemCount from '../../components/form/itemGroup/ItemCount';
-import * as productsImage from '../../images/products';
 import { types, cups } from '../../store/options';
 import { setMenuCount } from '../../store/mymenu';
 import { addOrderList, ADD_ORDER_LIST } from '../../store/order';
