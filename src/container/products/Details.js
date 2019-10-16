@@ -317,6 +317,7 @@ const Detail = ({
               <ItemCount
                 count={shotNum}
                 name="shotCnt"
+                ariaLabel="샷 수량"
                 onDecrease={() => onSetHandlerShotDecrease(shotNum)}
                 onIncrease={() => onSetHandlerShotIncrease(shotNum)}
               >
@@ -358,6 +359,7 @@ const Detail = ({
                     key={prop}
                     name={prop}
                     count={syrupNum[prop]}
+                    ariaLabel={`${prop} 수량`}
                     onDecrease={() =>
                       onSetHandlerSyrupDecrease(prop, syrupNum[prop])
                     }

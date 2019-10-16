@@ -207,6 +207,7 @@ const MyMenuPay = ({
             </div>
             <ItemCount
               count={menu.count}
+              ariaLabel="음료 수량"
               onDecrease={() => onHandlerDecreaseCount(menu.count)}
               onIncrease={() => onHandlerIncreaseCount(menu.count)}
             >

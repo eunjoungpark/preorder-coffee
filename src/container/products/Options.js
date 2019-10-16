@@ -209,7 +209,7 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
           </ul>
           <FlextCont>
             <Button kind="base" onClick={onSetHandlerOptions}>
-              확인
+              담으러 가기
             </Button>
           </FlextCont>
         </OptionGroup>

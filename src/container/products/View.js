@@ -402,6 +402,7 @@ const View = ({
             </figure>
             <ItemCount
               count={options.count}
+              ariaLabel="음료 수량"
               onDecrease={() => onHandlerDecreaseCount(options.count)}
               onIncrease={() => onHandlerIncreaseCount(options.count)}
             >

@@ -25,6 +25,7 @@ const ItemCount = ({
   count,
   onDecrease,
   onIncrease,
+  ariaLabel,
   name,
 }) => {
   return (
@@ -35,7 +36,7 @@ const ItemCount = ({
         <Button kind="default" onClick={onDecrease} ariaLabel="1만큼 수량감소">
           <span aria-hidden="true">-</span>
         </Button>
-        <span className="quantity" aria-label="수량">
+        <span className="quantity" aria-label={ariaLabel ? ariaLabel : null}>
           {count}
         </span>
         <Button kind="default" onClick={onIncrease} ariaLabel="1만큼 수량증가">
