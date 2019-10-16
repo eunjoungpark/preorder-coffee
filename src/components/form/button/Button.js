@@ -20,7 +20,7 @@ const Btn = styled.button`
   color: ${props => props.theme.font};
 `;
 
-const Button = ({ type, kind, children, onClick, className }) => {
+const Button = ({ type, kind, children, onClick, className, ariaLabel }) => {
   const thisTheme = theme[kind];
   return (
     <ThemeProvider theme={thisTheme}>
@@ -28,6 +28,7 @@ const Button = ({ type, kind, children, onClick, className }) => {
         type={type ? type : 'button'}
         onClick={onClick}
         className={className}
+        aria-label={ariaLabel ? ariaLabel : null}
       >
         {children}
       </Btn>

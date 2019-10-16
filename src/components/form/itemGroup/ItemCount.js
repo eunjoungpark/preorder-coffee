@@ -32,20 +32,11 @@ const ItemCount = ({
       <legend className={hidden ? 'hidden' : 'label'}>{children}</legend>
       <input type="hidden" name={name} value={count} />
       <div className="count">
-        <Button kind="default" onClick={onDecrease} aria-label="1만큼 수량감소">
+        <Button kind="default" onClick={onDecrease} ariaLabel="1만큼 수량감소">
           <span aria-hidden="true">-</span>
         </Button>
-        <span
-          className="quantity"
-          role="spinbutton"
-          tabindex="0"
-          aria-valuenow="1"
-          aria-valuemin="1"
-          aria-valuemax="20"
-        >
-          {count}
-        </span>
-        <Button kind="default" onClick={onIncrease} aria-label="1만큼 수량증가">
+        <span className="quantity">{count}</span>
+        <Button kind="default" onClick={onIncrease} ariaLabel="1만큼 수량증가">
           <span aria-hidden="true">+</span>
         </Button>
       </div>
