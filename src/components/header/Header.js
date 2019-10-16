@@ -115,7 +115,7 @@ const Header = ({ cntWish, userId }) => {
           <Link to="/wish" className="cart" onClick={onChangePageHandler}>
             <MdShoppingCart />
             {cntWish > 0 && (
-              <span className="count" ref={wishRef}>
+              <span className="count" ref={wishRef} aria-label="담은 음료 수">
                 {cntWish}
               </span>
             )}
