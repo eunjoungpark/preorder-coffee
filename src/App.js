@@ -172,6 +172,7 @@ const App = ({
                 shown={reLogin}
                 role="alert"
                 onClickHandler={onClickReLoginHandler}
+                aria-live="assertive"
               >
                 {modalMsg}
                 <Button kind="default" onClick={onClickReLoginHandler}>

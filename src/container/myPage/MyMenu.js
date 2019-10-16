@@ -138,6 +138,7 @@ const MyMemu = ({
         shown={alertModal}
         onClickHandler={onClickAlertHandler}
         role="alert"
+        aria-live="assertive"
       >
         {modalMsg}
         <br />
