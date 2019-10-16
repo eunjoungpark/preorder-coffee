@@ -507,11 +507,7 @@ const Detail = ({
           </form>
         )}
         {/* alert메시지 */}
-        <Modal
-          shown={alertModal}
-          onClickHandler={onClickAlertHandler}
-          role="alert"
-        >
+        <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
           {modalMsg}
           <br />
           <Button kind="default" onClick={onClickAlertHandler}>

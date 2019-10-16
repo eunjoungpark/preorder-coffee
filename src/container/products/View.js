@@ -487,11 +487,7 @@ const View = ({
 
         {/* alert메시지 */}
 
-        <Modal
-          shown={alertModal}
-          role="alert"
-          onClickHandler={onClickAlertHandler}
-        >
+        <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
           {modalMsg}
           <br />
           <Button kind="default" onClick={onClickAlertHandler}>

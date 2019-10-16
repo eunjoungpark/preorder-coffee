@@ -168,7 +168,7 @@ const Auth = ({
   ) : (
     <Form onSubmit={onSubmitHandlerAccount}>
       {error && (
-        <Modal onClickHandler={onClickErrorHandler} ariaLive="assertive">
+        <Modal onClickHandler={onClickErrorHandler}>
           <AuthModal className="error">
             {MESSAGE[error.message]
               ? MESSAGE[error.message]

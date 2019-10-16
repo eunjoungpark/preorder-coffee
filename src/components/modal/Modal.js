@@ -26,7 +26,7 @@ const Modal = ({ children, shown, ariaLive, onClickHandler }) => {
         hidden={shown}
         ref={modalRef}
         role="alert"
-        aria-live={ariaLive ? ariaLive : null}
+        aria-live="assertive"
       >
         <Backdrop
           onClick={onClickHandler ? onClickParentHandler : onChangePageHandler}
