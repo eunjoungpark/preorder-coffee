@@ -114,7 +114,7 @@ const App = ({
       } else {
         if (expectExpire < 0 && result) {
           setReLogin(false);
-          setModalMsg('장시간 사용하지 않았습니다.<br />다시 로그인 해주세요.');
+          setModalMsg('장시간 사용하지 않았습니다. 다시 로그인 해주세요.');
         }
 
         removeAuth(); //로그아웃
@@ -168,13 +168,9 @@ const App = ({
                   </ModalContents>
                 </AriaModal>
               )}
-              <Modal
-                shown={reLogin}
-                role="alert"
-                onClickHandler={onClickReLoginHandler}
-                aria-live="assertive"
-              >
+              <Modal shown={reLogin} onClickHandler={onClickReLoginHandler}>
                 {modalMsg}
+                <br />
                 <Button kind="default" onClick={onClickReLoginHandler}>
                   확인
                 </Button>

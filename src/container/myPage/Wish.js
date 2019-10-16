@@ -267,11 +267,7 @@ const Wish = ({
           {(loadingWish || loadingRemoveWish || loadingAddOrder) && <Loading />}
 
           {loadingAddOrder === false && loadingRemoveWish === false && (
-            <Modal
-              onClickHandler={onClickOrderHandler}
-              role="alert"
-              aria-live="assertive"
-            >
+            <Modal onClickHandler={onClickOrderHandler}>
               주문 완료되었습니다.
               <br />
               <Button kind="default" onClick={onClickOrderHandler}>
@@ -281,12 +277,7 @@ const Wish = ({
           )}
 
           {/* 기타 알럿노출 */}
-          <Modal
-            shown={alertModal}
-            onClickHandler={onClickAlertHandler}
-            role="alert"
-            aria-live="assertive"
-          >
+          <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
             {modalMsg}
             <br />
             <Button kind="default" onClick={onClickAlertHandler}>

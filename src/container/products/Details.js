@@ -511,7 +511,6 @@ const Detail = ({
           shown={alertModal}
           onClickHandler={onClickAlertHandler}
           role="alert"
-          aria-live="assertive"
         >
           {modalMsg}
           <br />

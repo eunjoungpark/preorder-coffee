@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { ModalContents } from '../common';
 import Backdrop from '../backdrop/Backdrop';
 
-const Modal = ({ children, shown, onClickHandler }) => {
+const Modal = ({ children, shown, role, onClickHandler }) => {
   const modalRef = useRef(null);
 
   const ModalWrap = styled.div`
@@ -22,7 +22,7 @@ const Modal = ({ children, shown, onClickHandler }) => {
   };
   return (
     <>
-      <ModalWrap hidden={shown} ref={modalRef}>
+      <ModalWrap hidden={shown} ref={modalRef} role="alert">
         <Backdrop
           onClick={onClickHandler ? onClickParentHandler : onChangePageHandler}
         />

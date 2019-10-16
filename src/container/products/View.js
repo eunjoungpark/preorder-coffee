@@ -490,7 +490,6 @@ const View = ({
         <Modal
           shown={alertModal}
           role="alert"
-          aria-live="assertive"
           onClickHandler={onClickAlertHandler}
         >
           {modalMsg}

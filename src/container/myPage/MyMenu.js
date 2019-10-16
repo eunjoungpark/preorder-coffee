@@ -134,12 +134,7 @@ const MyMemu = ({
     <>
       {(loadingMenu || loadingRemoveMenu) && <Loading />}
 
-      <Modal
-        shown={alertModal}
-        onClickHandler={onClickAlertHandler}
-        role="alert"
-        aria-live="assertive"
-      >
+      <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
         {modalMsg}
         <br />
         <Button kind="default" onClick={onClickAlertHandler}>

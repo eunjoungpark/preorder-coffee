@@ -173,11 +173,7 @@ const MyMenuPay = ({
         <PageTitle>나만의 음료 주문</PageTitle>
         {loadingAddOrder && <Loading />}
         {loadingAddOrder === false && (
-          <Modal
-            onClickHandler={onClickCompleteHandler}
-            role="alert"
-            aria-live="assertive"
-          >
+          <Modal onClickHandler={onClickCompleteHandler}>
             주문이 완료되었습니다.
             <br />
             <Button kind="default" onClick={onClickCompleteHandler}>
@@ -186,12 +182,7 @@ const MyMenuPay = ({
           </Modal>
         )}
 
-        <Modal
-          shown={alertModal}
-          onClickHandler={onClickAlertHandler}
-          role="alert"
-          aria-live="assertive"
-        >
+        <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
           {modalMsg}
           <br />
           <Button kind="default" onClick={onClickAlertHandler}>
