@@ -32,12 +32,12 @@ const ItemCount = ({
       <legend className={hidden ? 'hidden' : 'label'}>{children}</legend>
       <input type="hidden" name={name} value={count} />
       <div className="count">
-        <Button kind="default" onClick={onDecrease}>
-          -
+        <Button kind="default" onClick={onDecrease} aria-label="1만큼 수량감소">
+          <span aria-hidden="true">-</span>
         </Button>
         <span className="quantity">{count}</span>
-        <Button kind="default" onClick={onIncrease}>
-          +
+        <Button kind="default" onClick={onIncrease} aria-label="1만큼 수량증가">
+          <span aria-hidden="true">+</span>
         </Button>
       </div>
     </ItemCountStyle>
