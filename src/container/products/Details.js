@@ -298,7 +298,8 @@ const Detail = ({
 
   //모달가림
   const onClickAlertHandler = useCallback(() => {
-    setAlertModal(true);
+    setAlertModal(!alertModal);
+    setModalMsg('');
   }, [alertModal]);
 
   return (
@@ -306,11 +307,11 @@ const Detail = ({
     options && (
       <Contents>
         <PageTitle>
-          {product.en}
+          <span lang="en">{product.en}</span>
           <span className="ko">{product.ko}</span>
         </PageTitle>
         {option === 'shot' && (
-          <form onSubmit={onSetHandlerShot} ref={shotForm}>
+          <form onSubmit={onSetHandlerShot} ref={shotForm} id="shotForm">
             <ExtraBox>
               <SubTitle>커피</SubTitle>
               <ItemCount
@@ -339,7 +340,7 @@ const Detail = ({
               </ItemGroup>
             </ExtraBox>
             <FlextCont>
-              <Button type="submit" kind="base">
+              <Button type="submit" kind="base" aria-controls="shotForm">
                 적용
               </Button>
             </FlextCont>
@@ -349,7 +350,7 @@ const Detail = ({
         {/*시럽*/}
         {option === 'syrup' &&
           (options.syrup && (
-            <form onSubmit={onSetHandlerSyrup} ref={syrupForm}>
+            <form onSubmit={onSetHandlerSyrup} ref={syrupForm} id="syrupForm">
               <ExtraBox>
                 <SubTitle>시럽</SubTitle>
                 {Object.keys(koSyrup).map(prop => (
@@ -369,7 +370,7 @@ const Detail = ({
                 ))}
               </ExtraBox>
               <FlextCont>
-                <Button type="submit" kind="base">
+                <Button type="submit" kind="base" aria-controls="syrupForm">
                   적용
                 </Button>
               </FlextCont>
@@ -378,7 +379,7 @@ const Detail = ({
 
         {/*얼음*/}
         {option === 'ice' && (
-          <form onSubmit={onSetHandlerIce} ref={iceForm}>
+          <form onSubmit={onSetHandlerIce} ref={iceForm} id="iceForm">
             <ExtraBox>
               <SubTitle>얼음</SubTitle>
               <ItemGroup label="얼음 양">
@@ -397,7 +398,7 @@ const Detail = ({
               </ItemGroup>
             </ExtraBox>
             <FlextCont>
-              <Button type="submit" kind="base">
+              <Button type="submit" kind="base" aria-controls="iceForm">
                 적용
               </Button>
             </FlextCont>
@@ -406,7 +407,7 @@ const Detail = ({
 
         {/*물*/}
         {option === 'water' && (
-          <form onSubmit={onSetHandlerWater} ref={waterForm}>
+          <form onSubmit={onSetHandlerWater} ref={waterForm} id="waterForm">
             <ExtraBox>
               <SubTitle>물</SubTitle>
               <ItemGroup label="물 양">
@@ -425,7 +426,7 @@ const Detail = ({
               </ItemGroup>
             </ExtraBox>
             <FlextCont>
-              <Button type="submit" kind="base">
+              <Button type="submit" kind="base" aria-controls="waterForm">
                 적용
               </Button>
             </FlextCont>
@@ -434,7 +435,11 @@ const Detail = ({
 
         {/*휘핑*/}
         {option === 'whipping' && (
-          <form onSubmit={onSetHandlerWhipping} ref={whippingForm}>
+          <form
+            onSubmit={onSetHandlerWhipping}
+            ref={whippingForm}
+            id="whippingForm"
+          >
             <ExtraBox>
               <SubTitle>휘핑</SubTitle>
               <ItemGroup label="휘핑크림 양">
@@ -453,7 +458,7 @@ const Detail = ({
               </ItemGroup>
             </ExtraBox>
             <FlextCont>
-              <Button type="submit" kind="base">
+              <Button type="submit" kind="base" aria-controls="whippingForm">
                 적용
               </Button>
             </FlextCont>
@@ -462,7 +467,7 @@ const Detail = ({
 
         {/*우유*/}
         {option === 'milk' && (
-          <form onSubmit={onSetHandlerMilk} ref={milkForm}>
+          <form onSubmit={onSetHandlerMilk} ref={milkForm} id="milkForm">
             <ExtraBox>
               <SubTitle>우유</SubTitle>
               <ItemGroup label="우유 종류">
@@ -495,15 +500,23 @@ const Detail = ({
               </ItemGroup>
             </ExtraBox>
             <FlextCont>
-              <Button type="submit" kind="base">
+              <Button type="submit" kind="base" aria-controls="milkForm">
                 적용
               </Button>
             </FlextCont>
           </form>
         )}
         {/* alert메시지 */}
-        <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
+        <Modal
+          shown={alertModal}
+          onClickHandler={onClickAlertHandler}
+          role="alert"
+        >
           {modalMsg}
+          <br />
+          <Button kind="default" onClick={onClickAlertHandler}>
+            확인
+          </Button>
         </Modal>
       </Contents>
     )

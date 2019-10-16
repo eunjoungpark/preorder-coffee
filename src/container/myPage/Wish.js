@@ -173,6 +173,13 @@ const Wish = ({
     return () => emptyLoading();
   }, []);
 
+  useEffect(() => {
+    if (loadingRemoveWish === false && loadingAddOrder !== false) {
+      setAlertModal(false);
+      setModalMsg('삭제되었습니다');
+    }
+  }, [loadingRemoveWish, loadingAddOrder]);
+
   //전체 선택 토글
   const onClickCheckHandler = useCallback(() => {
     updateWishList({
@@ -233,15 +240,16 @@ const Wish = ({
     }
   }, [wish, selected, total, count]);
 
-  //모달가림
   const onClickAlertHandler = useCallback(() => {
-    setAlertModal(true);
+    setModalMsg('');
+    setAlertModal(!alertModal);
   }, [alertModal]);
 
-  //주문완료시, 목록이동
-  const onClickCompleteHandler = () => {
+  const onClickOrderHandler = useCallback(() => {
+    onClickAlertHandler();
     history.push('/');
-  };
+  }, []);
+
   return (
     <Contents>
       <PageTitle>위시 리스트</PageTitle>
@@ -257,20 +265,30 @@ const Wish = ({
           />
           {/* 모든 통신시 로딩바 노출 */}
           {(loadingWish || loadingRemoveWish || loadingAddOrder) && <Loading />}
-          {/* 주문시 삭제되는 경우에는 알럿 비노출 */}
-          {loadingRemoveWish === false && loadingAddOrder !== false && (
-            <Modal>삭제되었습니다.</Modal>
-          )}
-          {/* 주문 완료시 알럿 노출 */}
+
           {loadingAddOrder === false && loadingRemoveWish === false && (
-            <Modal onClickHandler={onClickCompleteHandler}>
-              주문 완료했습니다.
+            <Modal onClickHandler={onClickOrderHandler} role="alert">
+              주문 완료되었습니다.
+              <br />
+              <Button kind="default" onClick={onClickOrderHandler}>
+                확인
+              </Button>
             </Modal>
           )}
+
           {/* 기타 알럿노출 */}
-          <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
+          <Modal
+            shown={alertModal}
+            onClickHandler={onClickAlertHandler}
+            role="alert"
+          >
             {modalMsg}
+            <br />
+            <Button kind="default" onClick={onClickAlertHandler}>
+              확인
+            </Button>
           </Modal>
+
           {Object.keys(wish).length > 0 ? (
             <>
               <ol className="list">

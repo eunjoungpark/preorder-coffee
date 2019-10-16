@@ -48,10 +48,6 @@ const AuthModal = styled.div`
   &.error {
     color: #f00;
   }
-  button {
-    margin: 15px 0 0 0 !important;
-    font-size: 14px;
-  }
 `;
 
 const ValidationMsg = styled.p`
@@ -185,10 +181,15 @@ const Auth = ({
         value={formValidation.email.value}
         placeholder="이메일 주소를 입력해주세요"
         changed={onChangeHandlerEmail}
+        errormessage="errorId"
       />
       {formValidation.email.touched && (
         <ValidationMsg
           className={formValidation.email.valid ? 'success' : 'error'}
+          id="errorId"
+          role="alert"
+          aria-live="assertive"
+          aria-invalid={!formValidation.email.valid}
         >
           {formValidation.email.valid
             ? '유효한 이메일양식입니다.'
@@ -203,9 +204,14 @@ const Auth = ({
         value={formValidation.password.value}
         placeholder="비밀번호를 입력해주세요"
         changed={onChangeHandlerPasswd}
+        errormessage="errorPasswd"
       />
       {formValidation.password.touched && (
         <ValidationMsg
+          id="errorPasswd"
+          role="alert"
+          aria-live="assertive"
+          aria-invalid={!formValidation.password.valid}
           className={formValidation.password.valid ? 'success' : 'error'}
         >
           {formValidation.password.valid

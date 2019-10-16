@@ -24,6 +24,8 @@ const Radio = styled.span`
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
     z-index: -1;
   }
   input:checked ~ label {
@@ -32,7 +34,16 @@ const Radio = styled.span`
   }
 `;
 
-const RadioBtn = ({ type, id, name, value, children, checked, onClick }) => {
+const RadioBtn = ({
+  type,
+  id,
+  lang,
+  name,
+  value,
+  children,
+  checked,
+  onClick,
+}) => {
   const thisTheme = theme[type];
   return (
     <ThemeProvider theme={thisTheme}>
@@ -44,7 +55,7 @@ const RadioBtn = ({ type, id, name, value, children, checked, onClick }) => {
           value={value}
           defaultChecked={checked}
         />
-        <label htmlFor={id} onClick={onClick}>
+        <label htmlFor={id} onClick={onClick} lang={lang}>
           {children}
         </label>
       </Radio>
@@ -56,6 +67,7 @@ RadioBtn.propTypes = {
   type: PropTypes.string,
   id: PropTypes.string,
   name: PropTypes.string,
+  lang: PropTypes.string,
   value: PropTypes.string,
   children: PropTypes.string,
   checked: PropTypes.bool,

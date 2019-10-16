@@ -100,14 +100,20 @@ const List = ({ lists, initProduct, initOptions, onSetProduct }) => {
             return (
               <ListItem key={`hot${index}`}>
                 <Link to={url} onClick={() => onSetProductHandler('hot', kind)}>
-                  <img
-                    src={productsImage[`hot_${kind}`]}
-                    width="180"
-                    alt={hotItem.ko}
-                  />
-                  <p className="en">{hotItem.en}</p>
-                  <p className="ko">{hotItem.ko}</p>
-                  <p className="price">{commas(hotItem.price)}</p>
+                  <figure>
+                    <img
+                      src={productsImage[`hot_${kind}`]}
+                      width="180"
+                      alt=""
+                    />
+                    <figcaption>
+                      <p className="en" lang="en">
+                        {hotItem.en}
+                      </p>
+                      <p className="ko">{hotItem.ko}</p>
+                    </figcaption>
+                    <p className="price">{commas(hotItem.price)}</p>
+                  </figure>
                 </Link>
               </ListItem>
             );
@@ -121,10 +127,14 @@ const List = ({ lists, initProduct, initOptions, onSetProduct }) => {
                   to={url}
                   onClick={() => onSetProductHandler('iced', kind)}
                 >
-                  <img src={productsImage[`iced_${kind}`]} alt={icedItem.ko} />
-                  <p className="en">{icedItem.en}</p>
-                  <p className="ko">{icedItem.ko}</p>
-                  <p className="price">{commas(icedItem.price)}</p>
+                  <figure>
+                    <img src={productsImage[`iced_${kind}`]} alt="" />
+                    <figcaption>
+                      <p className="en">{icedItem.en}</p>
+                      <p className="ko">{icedItem.ko}</p>
+                    </figcaption>
+                    <p className="price">{commas(icedItem.price)}</p>
+                  </figure>
                 </Link>
               </ListItem>
             );

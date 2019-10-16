@@ -124,7 +124,7 @@ const MyMenuPay = ({
     cnt => {
       if (cnt + 1 > MAX) {
         setAlertModal(false);
-        setModalMsg('최대 주문가능 수량은 9잔 입니다.');
+        setModalMsg('최대 주문가능 수량은 20잔 입니다.');
         return;
       }
       setMenuCount(cnt + 1);
@@ -156,15 +156,16 @@ const MyMenuPay = ({
     }
   }, [menu, selected]);
 
-  //모달가림
-  const onClickAlertHandler = useCallback(() => {
-    setAlertModal(true);
-  }, [alertModal]);
-
   //주문완료시, 목록이동
   const onClickCompleteHandler = useCallback(() => {
     history.push('/');
   }, []);
+
+  //모달가림
+  const onClickAlertHandler = useCallback(() => {
+    setModalMsg('');
+    setAlertModal(!alertModal);
+  }, [alertModal]);
 
   return (
     menu && (
@@ -174,11 +175,25 @@ const MyMenuPay = ({
         {loadingAddOrder === false && (
           <Modal onClickHandler={onClickCompleteHandler}>
             주문이 완료되었습니다.
+            <br />
+            <Button kind="default" onClick={onClickCompleteHandler}>
+              확인
+            </Button>
           </Modal>
         )}
-        <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
+
+        <Modal
+          shown={alertModal}
+          onClickHandler={onClickAlertHandler}
+          role="alert"
+        >
           {modalMsg}
+          <br />
+          <Button kind="default" onClick={onClickAlertHandler}>
+            확인
+          </Button>
         </Modal>
+
         <form>
           <ItemBase className="clear">
             <div className="itemImg">

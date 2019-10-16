@@ -1,9 +1,16 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import qs from '../../libs/qs';
 import produce from 'immer';
 import PropTypes from 'prop-types';
+import AriaModal from 'react-aria-modal';
 import { MdSend } from 'react-icons/md';
 import styled from 'styled-components';
 import Button from '../../components/form/button/Button';
@@ -14,6 +21,7 @@ import {
   PageTitle,
   SubTitle,
   FlextCont,
+  ModalContents,
 } from '../../components/common';
 import ItemCount from '../../components/form/itemGroup/ItemCount';
 import ItemGroup from '../../components/form/itemGroup/ItemGroup';
@@ -105,6 +113,9 @@ const OptionBox = styled.div`
       width: 100%;
     }
   }
+  button {
+    margin: 10px 5px;
+  }
 `;
 
 //음료주문 최대값
@@ -134,17 +145,24 @@ const View = ({
   const { type, kind } = qs(location);
   const s = kind === 'espresso' ? 'Solo' : 'Tall';
   const [hasMsg, setHasMsg] = useState(false);
-  const [shown, setShown] = useState(true);
-  const [menuName, setMenuName] = useState('');
-  const [modalMsg, setModalMsg] = useState('');
+  const [shown, setShown] = useState(false);
   const [alertModal, setAlertModal] = useState(true);
+  const [modalMsg, setModalMsg] = useState('');
+  const [menuName, setMenuName] = useState('');
 
+  //선택한 음료 설정
   useEffect(() => {
     if (!product) {
       onSetProduct({ type, kind });
     }
   }, []);
 
+  //언마운트시 로딩비움 처리
+  useEffect(() => {
+    return () => emptyLoading();
+  }, []);
+
+  //옵션 설정
   useEffect(() => {
     if (options.size === '') {
       onSetSize(s);
@@ -234,9 +252,21 @@ const View = ({
     }
   }, [product, options]);
 
+  //위시리스트 담기
   useEffect(() => {
-    return () => emptyLoading();
-  }, []);
+    if (loadingAddWish === false) {
+      setAlertModal(false);
+      setModalMsg('담기를 완료 했습니다');
+    }
+  }, [loadingAddWish]);
+
+  //나만의 음료 저장 알림
+  useEffect(() => {
+    if (loadingAddMenu === false) {
+      setAlertModal(false);
+      setModalMsg('나만의 음료를 저장 했습니다');
+    }
+  }, [loadingAddMenu]);
 
   //음료타입 변경
   const onSetHandlerType = useCallback(coffeeType => {
@@ -258,7 +288,7 @@ const View = ({
   const onHandlerIncreaseCount = useCallback(cnt => {
     if (cnt + 1 > MAX) {
       setAlertModal(false);
-      setModalMsg('최대 주문가능 수량은 9잔 입니다.');
+      setModalMsg('최대 주문가능 수량은 20잔 입니다.');
       return;
     }
     onSetCount(cnt + 1);
@@ -345,29 +375,31 @@ const View = ({
     }
   }, [menuName, shown]);
 
-  //모달가림
   const onClickAlertHandler = useCallback(() => {
-    setAlertModal(true);
+    setAlertModal(!alertModal);
+    setModalMsg('');
   }, [alertModal]);
 
   return (
     product &&
     options && (
       <Contents>
-        <PageTitle ko={product.ko}>{product.en}</PageTitle>
+        <PageTitle lang="en">{product.en}</PageTitle>
         <form>
           <ItemBase className="clear">
-            <div className="itemImg">
-              <img
-                src={productsImage[`${type}_${kind}`]}
-                width="150"
-                alt={product.ko}
-              />
-            </div>
-            <div className="itemInfo">
-              <p className="ko">{product.ko}</p>
-              <p className="price">{commas(total)}</p>
-            </div>
+            <figure>
+              <div className="itemImg">
+                <img
+                  src={productsImage[`${type}_${kind}`]}
+                  width="150"
+                  alt={product.ko}
+                />
+              </div>
+              <figcaption className="itemInfo">
+                <p className="ko">{product.ko}</p>
+                <p className="price">{commas(total)}</p>
+              </figcaption>
+            </figure>
             <ItemCount
               count={options.count}
               onDecrease={() => onHandlerDecreaseCount(options.count)}
@@ -382,6 +414,7 @@ const View = ({
               type="hot"
               id="waterType1"
               name="waterType"
+              lang="en"
               checked={type === 'hot' ? true : null}
               onClick={() => onSetHandlerType('hot')}
             >
@@ -391,6 +424,7 @@ const View = ({
               type="cold"
               id="waterType2"
               name="waterType"
+              lang="en"
               checked={type !== 'hot' ? true : null}
               onClick={() => onSetHandlerType('iced')}
             >
@@ -419,6 +453,7 @@ const View = ({
                 id={`sizeType${index}`}
                 name="sizeType"
                 key={s}
+                lang="en"
                 checked={s === options.size ? true : null}
                 onClick={() => onSetHandlerSize(s)}
               >
@@ -435,7 +470,12 @@ const View = ({
             </p>
           </Link>
           <FlextCont>
-            <Button kind="base" onClick={onClickShownHandler}>
+            <Button
+              kind="base"
+              onClick={onClickShownHandler}
+              aria-haspopup="dialog"
+              aria-pressed="false"
+            >
               나만의 메뉴등록
             </Button>
             <Button kind="base" onClick={onClickWishhandler}>
@@ -446,51 +486,72 @@ const View = ({
         {(loadingAddWish || loadingAddMenu) && <Loading />}
 
         {/* alert메시지 */}
-        <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
+
+        <Modal
+          shown={alertModal}
+          role="alert"
+          onClickHandler={onClickAlertHandler}
+        >
           {modalMsg}
+          <br />
+          <Button kind="default" onClick={onClickAlertHandler}>
+            확인
+          </Button>
         </Modal>
 
         {/* 나만의 메뉴 등록 모달 */}
-        <Modal shown={shown}>
-          <h1>나만의 메뉴 등록</h1>
-          {!hasMsg && (
-            <OptionBox>
-              <ul>
-                <li>
-                  {types[options.type]}/{options.size}/{cups[options.cup]}
-                </li>
-                <li>
-                  {Object.keys(options.messages).map(option => {
-                    return options.messages[option] !== '' &&
-                      'cup size'.indexOf(option) < 0
-                      ? options.messages[option] + '/'
-                      : null;
-                  })}
-                </li>
-              </ul>
-              <Input
-                type="text"
-                id="myName"
-                label="나만의 음료명"
-                value={menuName}
-                placeholder="나만의 음료에 이름을 붙여보세요"
-                changed={onChangeMenuHandler}
-              />
-            </OptionBox>
-          )}
-          <FlextCont>
-            <Button kind="gray" type="cancel" onClick={onClickShownHandler}>
-              취소
-            </Button>
-            <Button kind="dark" onClick={onClickMyMenuHandler}>
-              확인
-            </Button>
-          </FlextCont>
-        </Modal>
-        {/* 나만의 음료 담기완료 모달 */}
-        {loadingAddMenu === false && <Modal>나만의 음료를 저장 했습니다</Modal>}
-        {/* 위시리스트 담기완료 모달 */}
-        {loadingAddWish === false && <Modal>담기를 완료 했습니다</Modal>}
+        {shown && (
+          <AriaModal
+            onExit={onClickShownHandler}
+            initialFocus="#myName"
+            titleId="my_menu_modal"
+          >
+            <ModalContents>
+              <h1 id="my_menu_modal">나만의 메뉴 등록</h1>
+              <p className="hidden" id="my_menu_modal_description">
+                선택한 옵션사항을 확인하고 나만의 메뉴로 등록합니다.
+              </p>
+              {!hasMsg && (
+                <OptionBox>
+                  <ul>
+                    <li>
+                      {types[options.type]}/{options.size}/{cups[options.cup]}
+                    </li>
+                    <li>
+                      {Object.keys(options.messages).map(option => {
+                        return options.messages[option] !== '' &&
+                          'cup size'.indexOf(option) < 0
+                          ? options.messages[option] + '/'
+                          : null;
+                      })}
+                    </li>
+                  </ul>
+                  <Input
+                    type="text"
+                    id="myName"
+                    name="myName"
+                    label="나만의 음료명"
+                    value={menuName}
+                    placeholder="나만의 음료에 이름을 붙여보세요"
+                    changed={onChangeMenuHandler}
+                  />
+                </OptionBox>
+              )}
+              <FlextCont>
+                <Button kind="gray" type="cancel" onClick={onClickShownHandler}>
+                  취소
+                </Button>
+                <Button
+                  kind="dark"
+                  type="submit"
+                  onClick={onClickMyMenuHandler}
+                >
+                  등록
+                </Button>
+              </FlextCont>
+            </ModalContents>
+          </AriaModal>
+        )}
       </Contents>
     )
   );

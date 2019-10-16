@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -93,6 +93,8 @@ const MyMemu = ({
   setMenu,
   history,
 }) => {
+  const [modalMsg, setModalMsg] = useState('');
+  const [alertModal, setAlertModal] = useState(true);
   useEffect(() => {
     if (auth.localId === null) {
       history.push('/');
@@ -102,6 +104,13 @@ const MyMemu = ({
   useEffect(() => {
     return () => emptyLoading();
   }, []);
+
+  useEffect(() => {
+    if (loadingRemoveMenu === false) {
+      setAlertModal(false);
+      setModalMsg('삭제 되었습니다');
+    }
+  }, [loadingRemoveMenu]);
 
   const onRemoveMenuHandler = useCallback(id => {
     removeMenu({
@@ -116,10 +125,27 @@ const MyMemu = ({
     history.push('/mymenu/pay');
   }, []);
 
+  const onClickAlertHandler = useCallback(() => {
+    setModalMsg('');
+    setAlertModal(!alertModal);
+  }, [alertModal]);
+
   return (
     <>
       {(loadingMenu || loadingRemoveMenu) && <Loading />}
-      {loadingRemoveMenu === false && <Modal>삭제 되었습니다.</Modal>}
+
+      <Modal
+        shown={alertModal}
+        onClickHandler={onClickAlertHandler}
+        role="alert"
+      >
+        {modalMsg}
+        <br />
+        <Button kind="default" onClick={onClickAlertHandler}>
+          확인
+        </Button>
+      </Modal>
+
       {menuList && (
         <Contents>
           <PageTitle>나만의 메뉴 목록</PageTitle>

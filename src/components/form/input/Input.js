@@ -19,12 +19,14 @@ const InputBox = styled.fieldset`
 const Input = ({
   type,
   id,
+  name,
   value,
   label,
   placeholder,
   changed,
   className,
   hidden,
+  errormessage,
 }) => {
   return (
     <InputBox className="clear">
@@ -34,10 +36,12 @@ const Input = ({
       <input
         type={type ? type : 'text'}
         id={id}
+        name={name}
         placeholder={placeholder}
         onChange={changed}
         value={value}
         className={className}
+        aria-errormessage={errormessage ? errormessage : null}
       />
     </InputBox>
   );

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Backdrop from '../../components/backdrop/Backdrop';
 import Lnb from '../../components/nav/SideNav';
-import { MdClose, MdShoppingCart } from 'react-icons/md';
+import { MdShoppingCart } from 'react-icons/md';
 import logo from '../../assets/logo.png';
 
 const HeadStyle = styled.header`
@@ -52,6 +52,7 @@ const HeadStyle = styled.header`
 `;
 
 const TriggerNav = styled.button`
+  display: ${props => (props.isAni ? 'none' : 'block')};
   position: absolute;
   top: 10px;
   left: 10px;
@@ -59,40 +60,12 @@ const TriggerNav = styled.button`
   height: 40px;
   vertical-align: top;
   .open {
-    padding:0 6px;
-    transform: rotate(0deg);
-    transition: all 1s ease;  
+    padding: 0 6px;
     span {
       display: block;
       height: 3px;
       margin: 6px 0;
       background-color: #fff;
-    }
-  }
-  .close {
-    position:absolute;
-    left:0;
-    top:0;
-    width:0;
-    height:0;
-    color:#fff;
-    font-size:40px
-    transform: rotate(90deg);
-    opacity: 0;
-    transition: all 1s ease;
-  }
-  &.navAni {
-    .open {
-      transform: rotate(90deg);
-      width:0;
-      height:0;
-      opacity: 0;
-    }
-    .close {
-      width:auto;
-      height:auto;
-      transform: rotate(0);
-      opacity: 1;
     }
   }
 `;
@@ -125,17 +98,16 @@ const Header = ({ cntWish, userId }) => {
   return (
     <>
       <HeadStyle>
-        <TriggerNav onClick={toggleNav} className={isAni ? 'navAni' : ''}>
+        <TriggerNav onClick={toggleNav} aria-label="메뉴 열기" isAni={isAni}>
           <div className="open">
             <span></span>
             <span></span>
             <span></span>
           </div>
-          <MdClose className="close" />
         </TriggerNav>
         <h1>
-          <Link to="/" className="logo" onClick={onChangePageHandler}>
-            <LogoImg src={logo} />
+          <Link to="/" className="logo" onClick={onChangePageHandler} lang="en">
+            <LogoImg src={logo} alt="" />
             Coffee Shop
           </Link>
         </h1>
@@ -151,7 +123,11 @@ const Header = ({ cntWish, userId }) => {
         )}
       </HeadStyle>
       {isAni && <Backdrop onClick={onChangePageHandler} />}
-      <Lnb isAni={isAni} onChangePageHandler={onChangePageHandler} />
+      <Lnb
+        isAni={isAni}
+        onChangePageHandler={onChangePageHandler}
+        onToggleHandler={toggleNav}
+      />
     </>
   );
 };

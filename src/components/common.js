@@ -9,16 +9,39 @@ export const Contents = styled.section`
   padding: 20px 10px;
 `;
 
+/* Modal */
+export const ModalContents = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 300px;
+  padding: 20px;
+  border-radius: 5px;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  z-index: 100;
+  line-height: 1.5;
+  text-align: center;
+  h1 {
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  button {
+    margin: 15px 5px 0 5px !important;
+    font-size: 14px;
+  }
+`;
+
 /* Title */
 export const PageTitle = styled.h2`
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   color: #000;
   font-size: 26px;
   font-weight: bold;
+  line-height: 1.5;
   .ko {
     display: block;
     font-size: 18px;
-    line-height: 1.8;
     color: #333;
   }
 `;

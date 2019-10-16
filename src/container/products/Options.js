@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { commas } from '../../libs/util';
 import styled from 'styled-components';
 import { MdKeyboardArrowRight } from 'react-icons/md';
-
 import {
   Contents,
   PageTitle,
@@ -100,7 +99,7 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
     options && (
       <Contents>
         <PageTitle>
-          {product.en}
+          <span lang="en">{product.en}</span>
           <span className="ko">{product.ko}</span>
         </PageTitle>
         <PageSecnTitle>옵션</PageSecnTitle>
@@ -209,7 +208,7 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
             ) : null}
           </ul>
           <FlextCont>
-            <Button type="submit" kind="base" onClick={onSetHandlerOptions}>
+            <Button kind="base" onClick={onSetHandlerOptions}>
               확인
             </Button>
           </FlextCont>

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import AriaModal from 'react-aria-modal';
 import './css/base.scss';
 import ErrorHandler from './errorHandler/ErrorHandler';
 import Wrapper from './layout/Wrapper';
-import { Container, FlextCont } from './components/common';
+import { Container, FlextCont, ModalContents } from './components/common';
 import Header from './components/header/Header';
 import Curtain from './container/Curtain';
 import List from './container/products/List';
@@ -41,8 +42,9 @@ const App = ({
   emptyWishList,
 }) => {
   const [cntWish, setCntWish] = useState(0);
-  const [appear, setAppear] = useState(true);
+  const [appear, setAppear] = useState(false);
   const [reLogin, setReLogin] = useState(true);
+  const [modalMsg, setModalMsg] = useState('');
 
   //리프래시에도 로그인상태 유지
   useEffect(() => {
@@ -89,7 +91,7 @@ const App = ({
       new Date(auth.expiresDate).getTime() - new Date().getTime();
     if (currentExpire > 0) {
       setTimeout(() => {
-        setAppear(false);
+        setAppear(true);
       }, currentExpire);
     }
   }, [auth.expiresDate]);
@@ -112,6 +114,7 @@ const App = ({
       } else {
         if (expectExpire < 0 && result) {
           setReLogin(false);
+          setModalMsg('장시간 사용하지 않았습니다.<br />다시 로그인 해주세요.');
         }
 
         removeAuth(); //로그아웃
@@ -119,10 +122,15 @@ const App = ({
         emptyMenu(); //나만의 메뉴 초기화
         emptyWishList(); //위시리스트 초기화
       }
-      setAppear(true);
+      setAppear(false);
     },
     [auth.expiresDate],
   );
+
+  const onClickReLoginHandler = useCallback(() => {
+    setReLogin(false);
+    setModalMsg('');
+  }, []);
 
   return (
     <Wrapper>
@@ -132,27 +140,43 @@ const App = ({
           <>
             <Header cntWish={cntWish} userId={auth.localId} />
             <Container>
-              <Modal shown={appear}>
-                로그인을 연장하시겠습니까?
-                <FlextCont>
-                  <Button
-                    kind="gray"
-                    onClick={() => onClickSessionHandler(false)}
-                  >
-                    취소
-                  </Button>
-                  <Button
-                    kind="dark"
-                    onClick={() => onClickSessionHandler(true)}
-                  >
-                    연장하기
-                  </Button>
-                </FlextCont>
-              </Modal>
-              <Modal shown={reLogin} onClickHandler={() => setReLogin(false)}>
-                장시간 사용하지 않았습니다.
-                <br />
-                다시 로그인 해주세요.
+              {appear && (
+                <AriaModal
+                  onExit={() => onClickSessionHandler(false)}
+                  titleId="auth_delay_modal"
+                >
+                  <ModalContents>
+                    <h1 id="auth_delay_modal">로그인을 연장하시겠습니까?</h1>
+                    <p>
+                      로그인 유효시간이 만료되었습니다. 로그인을
+                      연장하시겠습니까?
+                    </p>
+                    <FlextCont>
+                      <Button
+                        kind="gray"
+                        onClick={() => onClickSessionHandler(false)}
+                      >
+                        취소
+                      </Button>
+                      <Button
+                        kind="dark"
+                        onClick={() => onClickSessionHandler(true)}
+                      >
+                        연장하기
+                      </Button>
+                    </FlextCont>
+                  </ModalContents>
+                </AriaModal>
+              )}
+              <Modal
+                shown={reLogin}
+                role="alert"
+                onClickHandler={onClickReLoginHandler}
+              >
+                {modalMsg}
+                <Button kind="default" onClick={onClickReLoginHandler}>
+                  확인
+                </Button>
               </Modal>
               <Switch>
                 <Route
