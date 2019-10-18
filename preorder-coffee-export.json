@@ -1,0 +1,463 @@
+{
+  "coffee" : {
+    "hot" : {
+      "americano" : {
+        "en" : "Americano",
+        "ko" : "아메리카노",
+        "price" : 4100,
+        "sizes" : {
+          "Grande" : {
+            "extra" : 500,
+            "shot" : 3
+          },
+          "Tall" : {
+            "extra" : 0,
+            "shot" : 2
+          },
+          "Venti" : {
+            "extra" : 1000,
+            "shot" : 4
+          }
+        }
+      },
+      "caffe_latte" : {
+        "en" : "Caffe Latte",
+        "ko" : "카페라떼",
+        "milk" : "normal",
+        "price" : 4600,
+        "sizes" : {
+          "Grande" : {
+            "extra" : 500,
+            "shot" : 2
+          },
+          "Tall" : {
+            "extra" : 0,
+            "shot" : 1
+          },
+          "Venti" : {
+            "extra" : 1000,
+            "shot" : 2
+          }
+        }
+      },
+      "caffe_mocha" : {
+        "en" : "Caffe Mocha",
+        "ice" : "normal",
+        "ko" : "카페모카",
+        "milk" : "normal",
+        "price" : 5100,
+        "sizes" : {
+          "Grande" : {
+            "extra" : 500,
+            "shot" : 2,
+            "syrup" : {
+              "mocha" : 4
+            }
+          },
+          "Tall" : {
+            "extra" : 0,
+            "shot" : 1,
+            "syrup" : {
+              "mocha" : 3
+            }
+          },
+          "Venti" : {
+            "extra" : 1000,
+            "shot" : 2,
+            "syrup" : {
+              "mocha" : 5
+            }
+          }
+        }
+      },
+      "cappuccino" : {
+        "en" : "Cappuccino",
+        "ko" : "카푸치노",
+        "milk" : "normal",
+        "price" : 4600,
+        "sizes" : {
+          "Grande" : {
+            "extra" : 500,
+            "shot" : 2
+          },
+          "Tall" : {
+            "extra" : 0,
+            "shot" : 1
+          },
+          "Venti" : {
+            "extra" : 1000,
+            "shot" : 2
+          }
+        }
+      },
+      "espresso" : {
+        "en" : "Espresso",
+        "ko" : "에스프레소",
+        "price" : 3600,
+        "sizes" : {
+          "Doppio" : {
+            "extra" : 500,
+            "shot" : 2
+          },
+          "Solo" : {
+            "extra" : 0,
+            "shot" : 1
+          }
+        }
+      },
+      "macchiato" : {
+        "en" : "Caramel Macchiato",
+        "ko" : "카라멜 마끼아또",
+        "milk" : "normal",
+        "price" : 5600,
+        "sizes" : {
+          "Grande" : {
+            "extra" : 500,
+            "shot" : 2,
+            "syrup" : {
+              "vanilla" : 3
+            }
+          },
+          "Tall" : {
+            "extra" : 0,
+            "shot" : 1,
+            "syrup" : {
+              "vanilla" : 2
+            }
+          },
+          "Venti" : {
+            "extra" : 1000,
+            "shot" : 2,
+            "syrup" : {
+              "vanilla" : 4
+            }
+          }
+        }
+      }
+    },
+    "iced" : {
+      "americano" : {
+        "en" : "Iced Americano",
+        "ice" : "normal",
+        "ko" : "아메리카노",
+        "price" : 4100,
+        "sizes" : {
+          "Grande" : {
+            "extra" : 500,
+            "shot" : 3
+          },
+          "Tall" : {
+            "extra" : 0,
+            "shot" : 2
+          },
+          "Venti" : {
+            "extra" : 1000,
+            "shot" : 4
+          }
+        }
+      },
+      "caffe_latte" : {
+        "en" : "Iced Caffe Latte",
+        "ice" : "normal",
+        "ko" : "카페라떼",
+        "milk" : "normal",
+        "price" : 4600,
+        "sizes" : {
+          "Grande" : {
+            "extra" : 500,
+            "shot" : 2
+          },
+          "Tall" : {
+            "extra" : 0,
+            "shot" : 1
+          },
+          "Venti" : {
+            "extra" : 1000,
+            "shot" : 2
+          }
+        }
+      },
+      "caffe_mocha" : {
+        "en" : "Iced Caffe Mocha",
+        "ice" : "normal",
+        "ko" : "카페모카",
+        "milk" : "normal",
+        "price" : 5100,
+        "sizes" : {
+          "Grande" : {
+            "extra" : 500,
+            "shot" : 2,
+            "syrup" : {
+              "mocha" : 4
+            }
+          },
+          "Tall" : {
+            "extra" : 0,
+            "shot" : 1,
+            "syrup" : {
+              "mocha" : 3
+            }
+          },
+          "Venti" : {
+            "extra" : 1000,
+            "shot" : 2,
+            "syrup" : {
+              "mocha" : 5
+            }
+          }
+        }
+      },
+      "cappuccino" : {
+        "en" : "Iced Cappuccino",
+        "ice" : "normal",
+        "ko" : "카푸치노",
+        "milk" : "normal",
+        "price" : 4600,
+        "sizes" : {
+          "Grande" : {
+            "extra" : 500,
+            "shot" : 2
+          },
+          "Tall" : {
+            "extra" : 0,
+            "shot" : 1
+          },
+          "Venti" : {
+            "extra" : 1000,
+            "shot" : 2
+          }
+        }
+      },
+      "cold_brew" : {
+        "en" : "Cold Brew",
+        "ice" : "normal",
+        "ko" : "콜드브루",
+        "price" : 4500,
+        "sizes" : {
+          "Grande" : {
+            "extra" : 500,
+            "shot" : 0
+          },
+          "Tall" : {
+            "extra" : 0,
+            "shot" : 0
+          },
+          "Venti" : {
+            "extra" : 1000,
+            "shot" : 0
+          }
+        }
+      },
+      "espresso" : {
+        "en" : "Iced Espresso",
+        "ice" : "small",
+        "ko" : "에스프레소",
+        "price" : 3600,
+        "sizes" : {
+          "Doppio" : {
+            "extra" : 500,
+            "shot" : 2
+          },
+          "Solo" : {
+            "extra" : 0,
+            "shot" : 1
+          }
+        }
+      },
+      "macchiato" : {
+        "en" : "Iced Caramel Macchiato",
+        "ice" : "normal",
+        "ko" : "카라멜 마끼아또",
+        "milk" : "normal",
+        "price" : 5600,
+        "sizes" : {
+          "Grande" : {
+            "extra" : 500,
+            "shot" : 2,
+            "syrup" : {
+              "vanilla" : 3
+            }
+          },
+          "Tall" : {
+            "extra" : 0,
+            "shot" : 1,
+            "syrup" : {
+              "vanilla" : 2
+            }
+          },
+          "Venti" : {
+            "extra" : 1000,
+            "shot" : 2,
+            "syrup" : {
+              "vanilla" : 4
+            }
+          }
+        }
+      }
+    }
+  },
+  "options" : {
+    "count" : 1,
+    "cup" : "mug",
+    "ice" : {
+      "large" : false,
+      "normal" : true,
+      "small" : false
+    },
+    "max" : 9,
+    "messages" : {
+      "caramel" : "",
+      "cup" : "머그컵",
+      "decaffeine" : "",
+      "hazelnut" : "",
+      "ice" : "",
+      "milkKind" : "",
+      "milkVolume" : "",
+      "mocha" : "",
+      "shot" : "",
+      "size" : "",
+      "vanilla" : "",
+      "whipping" : ""
+    },
+    "milk" : {
+      "kind" : {
+        "free" : false,
+        "milk" : true,
+        "row" : false,
+        "soy" : false
+      },
+      "volume" : {
+        "large" : false,
+        "normal" : true,
+        "small" : false
+      }
+    },
+    "price" : 0,
+    "shot" : {
+      "base" : 0,
+      "count" : 0,
+      "decaffeine" : {
+        "half" : false,
+        "none" : false
+      },
+      "extra" : 600
+    },
+    "size" : "",
+    "syrup" : {
+      "caramel" : {
+        "base" : 0,
+        "count" : 0,
+        "extra" : 600
+      },
+      "hazelnut" : {
+        "base" : 0,
+        "count" : 0,
+        "extra" : 600
+      },
+      "mocha" : {
+        "base" : 0,
+        "count" : 0,
+        "extra" : 600
+      },
+      "vanilla" : {
+        "base" : 0,
+        "count" : 0,
+        "extra" : 600
+      }
+    },
+    "total" : 0,
+    "type" : "",
+    "water" : {
+      "large" : false,
+      "normal" : true,
+      "small" : false
+    },
+    "whipping" : {
+      "large" : false,
+      "normal" : false,
+      "small" : false
+    }
+  },
+  "store" : {
+    "0001" : {
+      "address" : "서울특별시 강남구 도산대로1",
+      "name" : "도산가로수길"
+    },
+    "0002" : {
+      "address" : "서울특별시 강남구 논현로1",
+      "name" : "논현힐탑"
+    },
+    "0003" : {
+      "address" : "서울특별시 강남구 테헤란로1",
+      "name" : "삼성역"
+    },
+    "0004" : {
+      "address" : "서울특별시 강남구 선릉로1",
+      "name" : "선릉로"
+    },
+    "0005" : {
+      "address" : "서울트별시 강남구 삼성로1",
+      "name" : "포스코"
+    },
+    "0006" : {
+      "address" : "서울특별시 강남구 테헤란로2",
+      "name" : "르네상스사거리"
+    },
+    "0007" : {
+      "address" : "서울특별시 강남구 선릉로2",
+      "name" : "압구정로데오역"
+    },
+    "0008" : {
+      "address" : "서울특별시 강남구 테헤란로3",
+      "name" : "역삼역"
+    },
+    "0009" : {
+      "address" : "서울특별시 강남구 테헤란로4",
+      "name" : "강남비젼타워"
+    },
+    "0010" : {
+      "address" : "서울특별시 강남구 강남대로1",
+      "name" : "뱅뱅사거리"
+    },
+    "0011" : {
+      "address" : "서울특별시 강남구 봉은사로1",
+      "name" : "아크로힐스논현"
+    },
+    "0012" : {
+      "address" : "서울특별시 강남구 언주로1",
+      "name" : "신압구정"
+    },
+    "0013" : {
+      "address" : "서울특별시 강남구 학동로1",
+      "name" : "청담공원"
+    },
+    "0014" : {
+      "address" : "서울특별시 강남구 봉은사로2",
+      "name" : "차병원사거리"
+    },
+    "0015" : {
+      "address" : "서울특별시 강남구 도곡로1",
+      "name" : "역삼럭키"
+    },
+    "0016" : {
+      "address" : "서울특별시 강남구 영동대로1",
+      "name" : "코엑스사거리"
+    },
+    "0017" : {
+      "address" : "서울특별시 강남구 밤고개로1",
+      "name" : "수서"
+    },
+    "0018" : {
+      "address" : "서울특별시 강남구 테헤란로5",
+      "name" : "선릉역"
+    },
+    "0019" : {
+      "address" : "서울특별시 강남구 논현로1",
+      "name" : "압구정미소"
+    },
+    "0020" : {
+      "address" : "서울특별시 강남구 논현로2",
+      "name" : "GS타워"
+    }
+  }
+}
