@@ -50,7 +50,7 @@ const EmptyBox = styled.div`
   text-align: center;
   font-size: 16px;
 `;
-const LIMIT = 8;
+const LIMIT = 11;
 const Orders = ({
   auth,
   orderList,
@@ -69,7 +69,7 @@ const Orders = ({
         token: auth.idToken,
         userId: auth.localId,
         page,
-        limit: 7,
+        limit: 10,
       });
     } else {
       history.push('/');
