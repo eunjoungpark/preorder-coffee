@@ -138,6 +138,8 @@ const App = ({
   useEffect(() => {
     if (wish) {
       setCntWish(Object.keys(wish).length);
+    } else {
+      setCntWish(0);
     }
   }, [wish]);
 
