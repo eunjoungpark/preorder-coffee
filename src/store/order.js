@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { call, put, takeLatest, throttle } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import * as api from '../libs/api';
 import { startLoading, finishLoading } from './loadings';
 import { errorMessage } from './error';
@@ -9,9 +9,11 @@ export const ORDER_LIST = 'orders/ORDER_LIST';
 const INIT_ORDER_LIST = 'orders/INIT_ORDER_LIST';
 const SET_ORDER_LIST = 'orders/SET_ORDER_LIST';
 export const ADD_ORDER_LIST = 'orders/ADD_ORDER_LIST';
+const EMPTY_ORDER_LIST = 'orders/EMPTY_ORDER_LIST';
 
 export const initOrderList = createAction(INIT_ORDER_LIST, payload => payload);
 export const addOrderList = createAction(ADD_ORDER_LIST, payload => payload);
+export const emptyOrderList = createAction(EMPTY_ORDER_LIST);
 
 const fetchOrderAsync = function*({ payload }) {
   yield put(startLoading(ORDER_LIST));
@@ -69,6 +71,12 @@ const order = handleActions(
         draft.lists = [...draft.lists, ...orderList];
         draft.endAt = Object.keys(orders)[0];
         draft.finish = Object.keys(orders).length < 7;
+      }),
+    [EMPTY_ORDER_LIST]: state =>
+      produce(state, draft => {
+        draft.lists = [];
+        draft.endAt = null;
+        draft.finish = false;
       }),
   },
   initialState,

@@ -5,7 +5,12 @@ import styled from 'styled-components';
 import { commas } from '../../libs/util';
 import { Contents, PageTitle } from '../../components/common';
 import Loading from '../../components/loading/Loading';
-import { initOrderList, ORDER_LIST } from '../../store/order';
+import {
+  initOrderList,
+  emptyOrderList,
+  ORDER_LIST,
+  ADD_ORDER_LIST,
+} from '../../store/order';
 import { emptyLoading } from '../../store/loadings';
 
 const OrderWrap = styled.div`
@@ -52,7 +57,9 @@ const Orders = ({
   page,
   finish,
   initOrderList,
+  emptyOrderList,
   loadingOrder,
+  loadingAddOrder,
   history,
 }) => {
   const [isScroll, setIsScroll] = useState(false);
@@ -67,7 +74,7 @@ const Orders = ({
     } else {
       history.push('/');
     }
-  }, [initOrderList]);
+  }, []);
 
   const onScroll = useCallback(() => {
     const { innerHeight } = window;
@@ -85,6 +92,7 @@ const Orders = ({
     window.addEventListener('scroll', onScroll, false);
     return () => {
       emptyLoading(ORDER_LIST);
+      emptyOrderList();
       window.removeEventListener('scroll', onScroll, false);
     };
   }, []);
@@ -129,7 +137,7 @@ const Orders = ({
               </tr>
             ) : (
               orderList.map((o, index) => {
-                const date = new Date(o.date * -1);
+                const date = new Date(o.date);
                 return (
                   <tr key={index}>
                     <td className="num">{index + 1}</td>
@@ -170,9 +178,10 @@ const mapStateToProps = ({ auth, order, loadings }) => ({
   page: order.endAt,
   finish: order.finish,
   loadingOrder: loadings[ORDER_LIST],
+  loadingAddOrder: loadings[ADD_ORDER_LIST],
 });
 
-const mapDispatchToProps = { initOrderList };
+const mapDispatchToProps = { initOrderList, emptyOrderList };
 
 export default connect(
   mapStateToProps,
