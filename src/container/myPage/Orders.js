@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -6,6 +6,7 @@ import { commas } from '../../libs/util';
 import { Contents, PageTitle } from '../../components/common';
 import Loading from '../../components/loading/Loading';
 import { initOrderList, ORDER_LIST } from '../../store/order';
+import { emptyLoading } from '../../store/loadings';
 
 const OrderWrap = styled.div`
   table {
@@ -44,80 +45,130 @@ const EmptyBox = styled.div`
   text-align: center;
   font-size: 16px;
 `;
-const Orders = ({ auth, order, initOrderList, loadingOrder, history }) => {
+const LIMIT = 8;
+const Orders = ({
+  auth,
+  orderList,
+  page,
+  finish,
+  initOrderList,
+  loadingOrder,
+  history,
+}) => {
+  const [isScroll, setIsScroll] = useState(false);
   useEffect(() => {
     if (auth.localId) {
       initOrderList({
         token: auth.idToken,
         userId: auth.localId,
+        page,
+        limit: 7,
       });
     } else {
       history.push('/');
     }
-  }, [auth.localId]);
+  }, [initOrderList]);
+
+  const onScroll = useCallback(() => {
+    const { innerHeight } = window;
+    const { scrollHeight } = document.body || document.documentElement;
+    const scrollTop =
+      document.body.scrollTop || document.documentElement.scrollTop;
+    if (scrollHeight - innerHeight - scrollTop < 10) {
+      setIsScroll(true);
+    } else {
+      setIsScroll(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', onScroll, false);
+    return () => {
+      emptyLoading(ORDER_LIST);
+      window.removeEventListener('scroll', onScroll, false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (page && !finish) {
+      initOrderList({
+        token: auth.idToken,
+        userId: auth.localId,
+        page,
+        limit: LIMIT,
+      });
+    }
+  }, [isScroll]);
 
   return (
     <Contents>
       <PageTitle>주문 내역</PageTitle>
       {loadingOrder && <Loading />}
-      {Object.keys(order).length > 0 ? (
-        <OrderWrap>
-          <table>
-            <colgroup>
-              <col width="10%" />
-              <col width="35%" />
-              <col width="30%" />
-              <col width="25%" />
-            </colgroup>
-            <thead>
+      <OrderWrap>
+        <table>
+          <colgroup>
+            <col width="10%" />
+            <col width="35%" />
+            <col width="30%" />
+            <col width="25%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">NO.</th>
+              <th scope="col">주문 내용</th>
+              <th scope="col">지점</th>
+              <th scope="col">날짜</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orderList.length <= 0 ? (
               <tr>
-                <th scope="col">NO.</th>
-                <th scope="col">주문 내용</th>
-                <th scope="col">지점</th>
-                <th scope="col">날짜</th>
+                <td colSpan="4">
+                  <EmptyBox>주문내역이 없습니다.</EmptyBox>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {Object.keys(order).map((o, index) => {
-                const date = new Date(order[o].date);
+            ) : (
+              orderList.map((o, index) => {
+                const date = new Date(o.date * -1);
                 return (
                   <tr key={index}>
                     <td className="num">{index + 1}</td>
                     <td>
-                      <p className="info">{order[o].contents}</p>
+                      <p className="info">{o.contents}</p>
                       <p className="total">
-                        <strong>결제금액 : </strong> {commas(order[o].total)}원
+                        <strong>결제금액 : </strong> {commas(o.total)}원
                       </p>
                     </td>
-                    <td>{order[o].store.name}</td>
+                    <td>{o.store.name}</td>
                     <td className="date">
                       {`${date.getFullYear()}.${date.getMonth() +
                         1}.${date.getDate()}`}{' '}
-                      {`${date.getHours()} : ${date.getMinutes()} : ${date.getMilliseconds()}`}
+                      <br />
+                      {`${date.getHours()} : ${date.getMinutes()} : ${date.getSeconds()}`}
                     </td>
                   </tr>
                 );
-              })}
-            </tbody>
-          </table>
-        </OrderWrap>
-      ) : (
-        <EmptyBox>주문내역이 없습니다.</EmptyBox>
-      )}
+              })
+            )}
+          </tbody>
+        </table>
+      </OrderWrap>
     </Contents>
   );
 };
 
 Orders.propTypes = {
+  order: PropTypes.object,
   auth: PropTypes.object.isRequired,
-  order: PropTypes.object.isRequired,
   initOrderList: PropTypes.func.isRequired,
   loadingOrder: PropTypes.bool,
 };
 
 const mapStateToProps = ({ auth, order, loadings }) => ({
   auth,
-  order,
+  orderList: order.lists,
+  page: order.endAt,
+  finish: order.finish,
   loadingOrder: loadings[ORDER_LIST],
 });
 

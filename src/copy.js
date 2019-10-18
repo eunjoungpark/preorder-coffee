@@ -16,7 +16,8 @@ import { removeAuth, accessAuth } from './store/auth';
 import { initWishList, emptyWishList } from './store/wish';
 import { initOptions } from './store/options';
 import { initMenu, emptyMenu } from './store/mymenu';
-import List from './container/products/List';
+
+const List = React.lazy(() => import('./container/products/List'));
 const View = React.lazy(() => import('./container/products/View'));
 const Options = React.lazy(() => import('./container/products/Options'));
 const Details = React.lazy(() => import('./container/products/Details'));
@@ -49,6 +50,7 @@ const App = ({
 
   let route = (
     <Switch>
+      <Route path="/" exact render={prop => <List {...prop} lists={lists} />} />
       <Route path="/view" render={prop => <View {...prop} lists={lists} />} />
       <Route path="/options" component={Options} />
       <Route path="/details" component={Details} />
@@ -61,6 +63,16 @@ const App = ({
   if (auth.localId) {
     route = (
       <Switch>
+        <Route
+          path="/"
+          exact
+          render={prop => <List {...prop} lists={lists} />}
+        />
+        <Route
+          path="/"
+          exact
+          render={prop => <List {...prop} lists={lists} />}
+        />
         <Route path="/view" render={prop => <View {...prop} lists={lists} />} />
         <Route path="/options" component={Options} />
         <Route path="/details" component={Details} />
@@ -163,57 +175,47 @@ const App = ({
   return (
     <Wrapper>
       <BrowserRouter>
-        {loadingProducts && <Curtain />}
-        {lists && (
-          <>
-            <Header cntWish={cntWish} userId={auth.localId} />
-            <Container>
-              <Route
-                path="/"
-                exact
-                render={prop => <List {...prop} lists={lists} />}
-              />
-              <Suspense fallback={<Loading />}>{route}</Suspense>
-              {appear && (
-                <AriaModal
-                  onExit={() => onClickSessionHandler(false)}
-                  titleId="auth_delay_modal"
-                >
-                  {/* 로그인 연장 모달 */}
-                  <ModalContents>
-                    <h1 id="auth_delay_modal">로그인을 연장하시겠습니까?</h1>
-                    <p>
-                      로그인 유효시간이 만료되었습니다. 로그인을
-                      연장하시겠습니까?
-                    </p>
-                    <FlextCont>
-                      <Button
-                        kind="gray"
-                        onClick={() => onClickSessionHandler(false)}
-                      >
-                        취소
-                      </Button>
-                      <Button
-                        kind="dark"
-                        onClick={() => onClickSessionHandler(true)}
-                      >
-                        연장하기
-                      </Button>
-                    </FlextCont>
-                  </ModalContents>
-                </AriaModal>
-              )}
-              {/* 기타 모달 */}
-              <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
-                {modalMsg}
-                <br />
-                <Button kind="default" onClick={onClickAlertHandler}>
-                  확인
-                </Button>
-              </Modal>
-            </Container>
-          </>
-        )}
+        <Header cntWish={cntWish} userId={auth.localId} />
+        <Container>
+          {loadingProducts && <Curtain />}
+          <Suspense fallback={<Loading />}>{lists && route}</Suspense>
+          {appear && (
+            <AriaModal
+              onExit={() => onClickSessionHandler(false)}
+              titleId="auth_delay_modal"
+            >
+              {/* 로그인 연장 모달 */}
+              <ModalContents>
+                <h1 id="auth_delay_modal">로그인을 연장하시겠습니까?</h1>
+                <p>
+                  로그인 유효시간이 만료되었습니다. 로그인을 연장하시겠습니까?
+                </p>
+                <FlextCont>
+                  <Button
+                    kind="gray"
+                    onClick={() => onClickSessionHandler(false)}
+                  >
+                    취소
+                  </Button>
+                  <Button
+                    kind="dark"
+                    onClick={() => onClickSessionHandler(true)}
+                  >
+                    연장하기
+                  </Button>
+                </FlextCont>
+              </ModalContents>
+            </AriaModal>
+          )}
+          {/* 기타 모달 */}
+          <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
+            {modalMsg}
+            <br />
+            <Button kind="default" onClick={onClickAlertHandler}>
+              확인
+            </Button>
+          </Modal>
+        </Container>
       </BrowserRouter>
     </Wrapper>
   );

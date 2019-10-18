@@ -120,7 +120,6 @@ const Wish = ({
   wish,
   auth,
   selected,
-  history,
   loadingWish,
   addOrderList,
   updateWishList,
@@ -135,6 +134,7 @@ const Wish = ({
   const [allCheck, setAllCheck] = useState(true);
   const [modalMsg, setModalMsg] = useState('');
   const [alertModal, setAlertModal] = useState(true);
+  const [removeModal, setRemoveModal] = useState(false);
 
   useEffect(() => {
     let s = 0, //음료합계
@@ -156,6 +156,9 @@ const Wish = ({
 
   useEffect(() => {
     if (loadingAddOrder === false) {
+      setAlertModal(false);
+      setRemoveModal(false);
+      setModalMsg('주문 완료했습니다.');
       Object.keys(wish).forEach(w => {
         if (wish[w].checked === true) {
           removeWish({
@@ -168,17 +171,21 @@ const Wish = ({
     }
   }, [loadingAddOrder]);
 
+  useEffect(() => {
+    if (removeModal && loadingRemoveWish === false) {
+      setAlertModal(false);
+      setModalMsg('삭제되었습니다.');
+    }
+  }, [loadingRemoveWish, removeModal]);
+
   //로딩상태 언마운트시 비움처리
   useEffect(() => {
-    return () => emptyLoading();
+    return () => {
+      emptyLoading(WISH_LIST);
+      emptyLoading(REMOVE_WISH);
+      emptyLoading(ADD_ORDER_LIST);
+    };
   }, []);
-
-  useEffect(() => {
-    if (loadingRemoveWish === false && loadingAddOrder !== false) {
-      setAlertModal(false);
-      setModalMsg('삭제되었습니다');
-    }
-  }, [loadingRemoveWish, loadingAddOrder]);
 
   //전체 선택 토글
   const onClickCheckHandler = useCallback(() => {
@@ -213,224 +220,208 @@ const Wish = ({
       userId: auth.localId,
       id,
     });
+    setRemoveModal(true);
   }, []);
 
   //주문 추가
-  const onAddOrderHandler = useCallback(() => {
-    if (!selected) {
-      setAlertModal(false);
-      setModalMsg('주문하실 매장을 선택해주세요.');
-    } else {
-      if (wish) {
-        const firstMenu = wish[Object.keys(wish)[0]];
-        addOrderList({
-          token: auth.idToken,
-          userId: auth.localId,
-          order: {
+  const onAddOrderHandler = useCallback(
+    e => {
+      e.preventDefault();
+      if (!selected) {
+        setAlertModal(false);
+        setModalMsg('주문하실 매장을 선택해주세요.');
+      } else {
+        if (wish) {
+          const firstMenu = wish[Object.keys(wish)[0]];
+          addOrderList({
+            token: auth.idToken,
             userId: auth.localId,
-            contents:
-              (firstMenu.nickname !== '' ? firstMenu.nickname : firstMenu.ko) +
-              (count > 1 ? ` 외 ${count - 1}잔` : ' 1잔'),
-            total: total,
-            store: selected,
-            date: new Date().getTime(),
-          },
-        });
+            order: {
+              contents:
+                (firstMenu.nickname !== ''
+                  ? firstMenu.nickname
+                  : firstMenu.ko) + (count > 1 ? ` 외 ${count - 1}잔` : ' 1잔'),
+              total: total,
+              store: selected,
+              date: new Date().getTime(),
+            },
+          });
+        }
       }
-    }
-  }, [wish, selected, total, count]);
+    },
+    [wish, selected, total, count],
+  );
 
   const onClickAlertHandler = useCallback(() => {
     setModalMsg('');
     setAlertModal(!alertModal);
   }, [alertModal]);
 
-  const onClickOrderHandler = useCallback(() => {
-    onClickAlertHandler();
-    history.push('/');
-  }, []);
-
   return (
     <Contents>
       <PageTitle>위시 리스트</PageTitle>
       <WishWrap>
-        <form>
-          <Checkbox
-            id="allCheck"
-            label="전체음료"
-            legend="위시리스트에 모든음료 주문선택"
-            onClick={onClickCheckHandler}
-            checked={allCheck}
-            className="allChk"
-          />
-          {/* 모든 통신시 로딩바 노출 */}
-          {(loadingWish || loadingRemoveWish || loadingAddOrder) && <Loading />}
+        {wish ? (
+          <form onSubmit={onAddOrderHandler}>
+            <Checkbox
+              id="allCheck"
+              label="전체음료"
+              legend="위시리스트에 모든음료 주문선택"
+              onClick={onClickCheckHandler}
+              checked={allCheck}
+              className="allChk"
+            />
+            {/* 모든 통신시 로딩바 노출 */}
+            {(loadingWish || loadingRemoveWish || loadingAddOrder) && (
+              <Loading />
+            )}
 
-          {loadingAddOrder === false && loadingRemoveWish === false && (
-            <Modal onClickHandler={onClickOrderHandler}>
-              주문 완료되었습니다.
+            {/* 기타 알럿노출 */}
+            <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
+              {modalMsg}
               <br />
-              <Button kind="default" onClick={onClickOrderHandler}>
+              <Button kind="default" onClick={onClickAlertHandler}>
                 확인
               </Button>
             </Modal>
-          )}
-
-          {/* 기타 알럿노출 */}
-          <Modal shown={alertModal} onClickHandler={onClickAlertHandler}>
-            {modalMsg}
-            <br />
-            <Button kind="default" onClick={onClickAlertHandler}>
-              확인
-            </Button>
-          </Modal>
-
-          {Object.keys(wish).length > 0 ? (
-            <>
-              <ol className="list">
-                {Object.keys(wish).map(w => {
-                  return (
-                    <li key={w}>
-                      <Checkbox
-                        id={w}
-                        label={
-                          wish[w].nickname !== ''
-                            ? wish[w].nickname
-                            : wish[w].ko
-                        }
-                        legend={`${wish[w].ko} 선택하기`}
-                        checked={wish[w].checked}
-                        style={{ background: wish[w].checked ? 'red' : '' }}
-                        onClick={() => onCheckHandler(w, wish[w].checked)}
-                      />
-                      <ul className="options">
+            <ol className="list">
+              {Object.keys(wish).map(w => {
+                return (
+                  <li key={w}>
+                    <Checkbox
+                      id={w}
+                      label={
+                        wish[w].nickname !== '' ? wish[w].nickname : wish[w].ko
+                      }
+                      legend={`${wish[w].ko} 선택하기`}
+                      checked={wish[w].checked}
+                      style={{ background: wish[w].checked ? 'red' : '' }}
+                      onClick={() => onCheckHandler(w, wish[w].checked)}
+                    />
+                    <ul className="options">
+                      <li className="clear">
+                        <span className="option">
+                          {types[wish[w].type]}/{wish[w].size}/
+                          {cups[wish[w].cup]}
+                        </span>
+                        <span className="extra">{commas(wish[w].price)}원</span>
+                      </li>
+                      {wish[w].shot.count > 0 && (
                         <li className="clear">
-                          <span className="option">
-                            {types[wish[w].type]}/{wish[w].size}/
-                            {cups[wish[w].cup]}
-                          </span>
+                          <span className="option">에스프레소</span>
                           <span className="extra">
-                            {commas(wish[w].price)}원
+                            {commas(wish[w].shot.count * wish[w].shot.extra)}원
                           </span>
                         </li>
-                        {wish[w].shot.count > 0 && (
-                          <li className="clear">
-                            <span className="option">에스프레소</span>
-                            <span className="extra">
-                              {commas(wish[w].shot.count * wish[w].shot.extra)}
-                              원
-                            </span>
-                          </li>
-                        )}
-                        {wish[w].syrup.mocha.count > 0 && (
-                          <li className="clear">
-                            <span className="option">모카 시럽</span>
-                            <span className="extra">
-                              {commas(
-                                wish[w].syrup.mocha.count *
-                                  wish[w].syrup.mocha.extra,
-                              )}
-                              원
-                            </span>
-                          </li>
-                        )}
-                        {wish[w].syrup.hazelnut.count > 0 && (
-                          <li className="clear">
-                            <span className="option">헤이즐넛 시럽</span>
-                            <span className="extra">
-                              {commas(
-                                wish[w].syrup.hazelnut.count *
-                                  wish[w].syrup.hazelnut.extra,
-                              )}
-                              원
-                            </span>
-                          </li>
-                        )}
-                        {wish[w].syrup.caramel.count > 0 && (
-                          <li className="clear">
-                            <span className="option">카라멜 시럽</span>
-                            <span className="extra">
-                              {commas(
-                                wish[w].syrup.caramel.count *
-                                  wish[w].syrup.caramel.extra,
-                              )}
-                              원
-                            </span>
-                          </li>
-                        )}
-                        {wish[w].syrup.vanilla.count > 0 && (
-                          <li className="clear">
-                            <span className="option">바닐라 시럽</span>
-                            <span className="extra">
-                              {commas(
-                                wish[w].syrup.vanilla.count *
-                                  wish[w].syrup.vanilla.extra,
-                              )}
-                              원
-                            </span>
-                          </li>
-                        )}
-                        {Object.keys(wish[w].messages).map(
-                          i =>
-                            wish[w].messages[i] !== '' &&
-                            'cup shot size mocha hazelnut caramel vanilla'.indexOf(
-                              i,
-                            ) < 0 && (
-                              <li key={i} className="clear">
-                                <span className="option">
-                                  {wish[w].messages[i]}
-                                </span>
-                                <span className="extra">0원</span>
-                              </li>
-                            ),
-                        )}
-                      </ul>
-                      <p className="total">{commas(wish[w].total)}원</p>
-                      <Button
-                        kind="blank"
-                        className="removeBtn"
-                        onClick={() => onRemoveHandler(w)}
-                      >
-                        <MdClose />
-                      </Button>
-                    </li>
-                  );
-                })}
-              </ol>
-              <div className="payBox">
-                <div className="inn">
-                  <p className="sumBox">
-                    총 {count}개<span className="sum">{commas(total)}원</span>
-                  </p>
-                  <p className="store">
-                    {selected ? (
-                      <>
-                        <strong>[{selected.name}]</strong> {selected.address}
-                      </>
-                    ) : (
-                      '주문할 매장을 선택해 주세요.'
-                    )}
-                    <Link to="/store">설정</Link>
-                  </p>
-                  <FlextCont>
-                    <Button kind="base" onClick={onAddOrderHandler}>
-                      주문하기
+                      )}
+                      {wish[w].syrup.mocha.count > 0 && (
+                        <li className="clear">
+                          <span className="option">모카 시럽</span>
+                          <span className="extra">
+                            {commas(
+                              wish[w].syrup.mocha.count *
+                                wish[w].syrup.mocha.extra,
+                            )}
+                            원
+                          </span>
+                        </li>
+                      )}
+                      {wish[w].syrup.hazelnut.count > 0 && (
+                        <li className="clear">
+                          <span className="option">헤이즐넛 시럽</span>
+                          <span className="extra">
+                            {commas(
+                              wish[w].syrup.hazelnut.count *
+                                wish[w].syrup.hazelnut.extra,
+                            )}
+                            원
+                          </span>
+                        </li>
+                      )}
+                      {wish[w].syrup.caramel.count > 0 && (
+                        <li className="clear">
+                          <span className="option">카라멜 시럽</span>
+                          <span className="extra">
+                            {commas(
+                              wish[w].syrup.caramel.count *
+                                wish[w].syrup.caramel.extra,
+                            )}
+                            원
+                          </span>
+                        </li>
+                      )}
+                      {wish[w].syrup.vanilla.count > 0 && (
+                        <li className="clear">
+                          <span className="option">바닐라 시럽</span>
+                          <span className="extra">
+                            {commas(
+                              wish[w].syrup.vanilla.count *
+                                wish[w].syrup.vanilla.extra,
+                            )}
+                            원
+                          </span>
+                        </li>
+                      )}
+                      {Object.keys(wish[w].messages).map(
+                        i =>
+                          wish[w].messages[i] !== '' &&
+                          'cup shot size mocha hazelnut caramel vanilla'.indexOf(
+                            i,
+                          ) < 0 && (
+                            <li key={i} className="clear">
+                              <span className="option">
+                                {wish[w].messages[i]}
+                              </span>
+                              <span className="extra">0원</span>
+                            </li>
+                          ),
+                      )}
+                    </ul>
+                    <p className="total">{commas(wish[w].total)}원</p>
+                    <Button
+                      kind="blank"
+                      className="removeBtn"
+                      onClick={() => onRemoveHandler(w)}
+                    >
+                      <MdClose />
                     </Button>
-                  </FlextCont>
-                </div>
+                  </li>
+                );
+              })}
+            </ol>
+            <div className="payBox">
+              <div className="inn">
+                <p className="sumBox">
+                  총 {count}개<span className="sum">{commas(total)}원</span>
+                </p>
+                <p className="store">
+                  {selected ? (
+                    <>
+                      <strong>[{selected.name}]</strong> {selected.address}
+                    </>
+                  ) : (
+                    '주문할 매장을 선택해 주세요.'
+                  )}
+                  <Link to="/store">설정</Link>
+                </p>
+                <FlextCont>
+                  <Button kind="base" type="submit">
+                    주문하기
+                  </Button>
+                </FlextCont>
               </div>
-            </>
-          ) : (
-            <EmptyBox>주문하실 음료가 없습니다.</EmptyBox>
-          )}
-        </form>
+            </div>
+          </form>
+        ) : (
+          <EmptyBox>주문하실 음료가 없습니다.</EmptyBox>
+        )}
       </WishWrap>
     </Contents>
   );
 };
 
 Wish.propTypes = {
-  wish: PropTypes.object.isRequired,
+  wish: PropTypes.object,
   auth: PropTypes.object.isRequired,
   selected: PropTypes.object,
   addOrderList: PropTypes.func.isRequired,

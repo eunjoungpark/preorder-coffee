@@ -101,7 +101,10 @@ const MyMemu = ({
   }, [auth.localId]);
 
   useEffect(() => {
-    return () => emptyLoading();
+    return () => {
+      emptyLoading(MY_MENU);
+      emptyLoading(REMOVE_MY_MENU);
+    };
   }, []);
 
   useEffect(() => {
@@ -140,62 +143,56 @@ const MyMemu = ({
           확인
         </Button>
       </Modal>
-
-      {menuList && (
-        <Contents>
-          <PageTitle>나만의 메뉴 목록</PageTitle>
-          <MyMenuWrap>
-            {Object.keys(menuList).length > 0 ? (
-              <ul className="list">
-                {Object.keys(menuList).map(m => (
-                  <li key={m} className="clear">
-                    <p className="menuImg">
-                      <img
-                        width="100"
-                        src={[menuList[m].image]}
-                        alt={
-                          menuList[m].nickname !== ''
-                            ? menuList[m].nickname
-                            : menuList[m].ko
-                        }
-                      />
-                    </p>
-                    <div className="menuInfo">
-                      <Button
-                        kind="blank"
-                        onClick={() => onSelectMenuHandler(m)}
-                      >
-                        <span className="ko">
-                          {menuList[m].nickname !== ''
-                            ? menuList[m].nickname
-                            : menuList[m].ko}
-                        </span>
-                        <span className="en">{menuList[m].en}</span>
-                      </Button>
-                      <Button
-                        kind="blank"
-                        className="removeBtn"
-                        onClick={() => onRemoveMenuHandler(m)}
-                      >
-                        <MdClose />
-                      </Button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <EmptyBox>나만의 음료를 저장해보세요!</EmptyBox>
-            )}
-          </MyMenuWrap>
-        </Contents>
-      )}
+      <Contents>
+        <PageTitle>나만의 메뉴 목록</PageTitle>
+        <MyMenuWrap>
+          {menuList ? (
+            <ul className="list">
+              {Object.keys(menuList).map(m => (
+                <li key={m} className="clear">
+                  <p className="menuImg">
+                    <img
+                      width="100"
+                      src={[menuList[m].image]}
+                      alt={
+                        menuList[m].nickname !== ''
+                          ? menuList[m].nickname
+                          : menuList[m].ko
+                      }
+                    />
+                  </p>
+                  <div className="menuInfo">
+                    <Button kind="blank" onClick={() => onSelectMenuHandler(m)}>
+                      <span className="ko">
+                        {menuList[m].nickname !== ''
+                          ? menuList[m].nickname
+                          : menuList[m].ko}
+                      </span>
+                      <span className="en">{menuList[m].en}</span>
+                    </Button>
+                    <Button
+                      kind="blank"
+                      className="removeBtn"
+                      onClick={() => onRemoveMenuHandler(m)}
+                    >
+                      <MdClose />
+                    </Button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <EmptyBox>나만의 음료를 저장해보세요!</EmptyBox>
+          )}
+        </MyMenuWrap>
+      </Contents>
     </>
   );
 };
 
 MyMemu.propTypes = {
   auth: PropTypes.object.isRequired,
-  menuList: PropTypes.object.isRequired,
+  menuList: PropTypes.object,
   emptyLoading: PropTypes.func.isRequired,
   removeMenu: PropTypes.func.isRequired,
   setMenu: PropTypes.func.isRequired,

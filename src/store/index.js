@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
-import product, { productListAsync } from './product';
+import { all } from 'redux-saga/effects';
 import loadings from './loadings';
 import error from './error';
+import product, { productListAsync } from './product';
 import options, { optionsAsync } from './options';
 import auth, { authAsync } from './auth';
 import store, { storeAsync } from './store';
 import wish, { wishAsync } from './wish';
 import mymenu, { menuAsync } from './mymenu';
 import order, { orderAsync } from './order';
-import { all } from 'redux-saga/effects';
 
 const rootReducers = combineReducers({
   product,

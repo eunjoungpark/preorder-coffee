@@ -36,7 +36,7 @@ const fetchMenuAsync = function*({ payload: auth }) {
 const addMenuAsync = function*({ payload }) {
   yield put(startLoading(ADD_MY_MENU));
   try {
-    yield call(api.addMenu, payload.token, payload.menu);
+    yield call(api.addMenu, payload.token, payload.userId, payload.menu);
     yield put({
       type: INIT_MY_MENU,
       payload: {
@@ -54,7 +54,7 @@ const removeMenuAsync = function*({ payload }) {
   yield put(startLoading(REMOVE_MY_MENU));
 
   try {
-    yield call(api.removeMenu, payload.token, payload.id);
+    yield call(api.removeMenu, payload.token, payload.userId, payload.id);
     yield put({
       type: INIT_MY_MENU,
       payload: {

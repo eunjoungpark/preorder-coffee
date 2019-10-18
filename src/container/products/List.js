@@ -13,12 +13,11 @@ const ListItem = styled.li`
   width: 50%;
   vertical-align: top;
   animation-name: listLoading;
-  animation-duration: 0.8s;
+  animation-duration: 0.5s;
   a {
     position: relative;
     display: block;
     padding: 20px 10px;
-    text-indent: 10px;
     &:hover {
       :after {
         content: '';
@@ -35,6 +34,7 @@ const ListItem = styled.li`
 
   img {
     width: 180px;
+    height: 126px;
     margin: 0 auto 10px auto;
     display: block;
   }
@@ -66,13 +66,14 @@ const ListItem = styled.li`
     }
     from {
       opacity: 0;
-      margin-top: 100px;
+      margin-top: 50px;
     }
   }
 
   @media screen and (max-width: 430px) {
     img {
       width: 100%;
+      height: auto;
     }
   }
 `;

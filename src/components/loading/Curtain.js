@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import curtain01 from '../assets/curtain/curtain01.png';
-import curtain02 from '../assets/curtain/curtain02.png';
-import curtain03 from '../assets/curtain/curtain03.png';
-import curtain04 from '../assets/curtain/curtain04.png';
-import curtain05 from '../assets/curtain/curtain05.png';
-import curtain06 from '../assets/curtain/curtain06.png';
+import curtain01 from '../../assets/curtain/curtain01.png';
+import curtain02 from '../../assets/curtain/curtain02.png';
+import curtain03 from '../../assets/curtain/curtain03.png';
+import curtain04 from '../../assets/curtain/curtain04.png';
+import curtain05 from '../../assets/curtain/curtain05.png';
+import curtain06 from '../../assets/curtain/curtain06.png';
 const CurtainContainer = styled.div`
   position: fixed;
   top: 0;

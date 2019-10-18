@@ -42,7 +42,7 @@ const fetchWishAsync = function*({ payload: auth }) {
 const addWishAsync = function*({ payload }) {
   yield put(startLoading(ADD_WISH));
   try {
-    yield call(api.addWish, payload.token, payload.wish);
+    yield call(api.addWish, payload.token, payload.userId, payload.wish);
     yield put({
       type: INIT_WISH_LIST,
       payload: {
@@ -58,7 +58,7 @@ const addWishAsync = function*({ payload }) {
 
 const updateWishAsync = function*({ payload }) {
   try {
-    yield call(api.updateWish, payload.token, payload.wish);
+    yield call(api.updateWish, payload.token, payload.userId, payload.wish);
     yield put({
       type: INIT_WISH_LIST,
       payload: {
@@ -73,7 +73,13 @@ const updateWishAsync = function*({ payload }) {
 
 const updateAWishAsync = function*({ payload }) {
   try {
-    yield call(api.updateAWish, payload.token, payload.id, payload.wish);
+    yield call(
+      api.updateAWish,
+      payload.token,
+      payload.userId,
+      payload.id,
+      payload.wish,
+    );
     yield put({
       type: INIT_WISH_LIST,
       payload: {
@@ -89,7 +95,7 @@ const updateAWishAsync = function*({ payload }) {
 const removeWishAsync = function*({ payload }) {
   yield put(startLoading(REMOVE_WISH));
   try {
-    yield call(api.removeWish, payload.token, payload.id);
+    yield call(api.removeWish, payload.token, payload.userId, payload.id);
     yield put({
       type: INIT_WISH_LIST,
       payload: {

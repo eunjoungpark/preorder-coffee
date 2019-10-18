@@ -16,49 +16,53 @@ export const options = () => instance.get('/options.json');
 export const store = () => instance.get('/store.json');
 
 //WISH ADD
-export const addWish = (token, wish) =>
-  instance.post(`/wish.json?auth=${token}`, wish);
+export const addWish = (token, userId, wish) =>
+  instance.post(`/wish/${userId}.json?auth=${token}`, wish);
 
 //WISH UPDATE
-export const updateWish = (token, wish) =>
-  instance.put(`/wish.json?auth=${token}`, wish);
+export const updateWish = (token, userId, wish) =>
+  instance.put(`/wish/${userId}.json?auth=${token}`, wish);
 
 //WISH UPDATE
-export const updateAWish = (token, id, wish) =>
-  instance.put(`/wish/${id}.json?auth=${token}`, wish);
+export const updateAWish = (token, userId, id, wish) =>
+  instance.put(`/wish/${userId}/${id}.json?auth=${token}`, wish);
 
 //WISH REMOVE
-export const removeWish = (token, id) =>
-  instance.delete(`/wish/${id}.json?auth=${token}`);
+export const removeWish = (token, userId, id) =>
+  instance.delete(`/wish/${userId}/${id}.json?auth=${token}`);
 
 //WISH GET
 export const getWish = (token, userId) =>
-  instance.get(`/wish.json?auth=${token}&orderBy="userId"&equalTo="${userId}"`);
+  instance.get(`/wish/${userId}.json?auth=${token}&orderBy="date"`);
 
 //MEMU ADD
-export const addMenu = (token, menu) =>
-  instance.post(`/mymenu.json?auth=${token}`, menu);
+export const addMenu = (token, userId, menu) =>
+  instance.post(`/mymenu/${userId}.json?auth=${token}`, menu);
 
 //MEMU REMOVE
-export const removeMenu = (token, id) =>
-  instance.delete(`/mymenu/${id}.json?auth=${token}`);
+export const removeMenu = (token, userId, id) =>
+  instance.delete(`/mymenu/${userId}/${id}.json?auth=${token}`);
 
 //MEMU GET
 export const getMenu = (token, userId) =>
-  instance.get(
-    `/mymenu.json?auth=${token}&orderBy="userId"&equalTo="${userId}"`,
-  );
+  instance.get(`/mymenu/${userId}.json?auth=${token}&orderBy="date"`);
 
 //ORDER ADD
-export const addOrder = (token, order) =>
-  instance.post(`/order.json?auth=${token}`, order);
+export const addOrder = (token, userId, order) =>
+  instance.post(`/order/${userId}.json?auth=${token}`, order);
 
 //ORDER GET
-export const getOrder = (token, userId) =>
-  instance.get(
-    `/order.json?auth=${token}&orderBy="userId"&equalTo="${userId}"`,
-  );
-
+export const getOrder = (token, userId, page, limit) => {
+  if (page === null) {
+    return instance.get(
+      `/order/${userId}.json?auth=${token}&orderBy="$key"&limitToLast=${limit}`,
+    );
+  } else {
+    return instance.get(
+      `/order/${userId}.json?auth=${token}&orderBy="$key"&endAt="${page}"&limitToLast=${limit}`,
+    );
+  }
+};
 //SIGNUP & SIGNIN
 const signup = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${WEB_KEY}`;
 const signin = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${WEB_KEY}`;

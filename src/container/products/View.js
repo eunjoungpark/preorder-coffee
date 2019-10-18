@@ -48,6 +48,7 @@ const ItemBase = styled.div`
     text-align: center;
     img {
       width: 150px;
+      height: 105px;
     }
   }
   .itemInfo {
@@ -119,6 +120,8 @@ const View = ({
   product,
   options,
   auth,
+  menuList,
+  wish,
   onSetProduct,
   onSetSyrup,
   onSetCount,
@@ -153,7 +156,10 @@ const View = ({
 
   //언마운트시 로딩비움 처리
   useEffect(() => {
-    return () => emptyLoading();
+    return () => {
+      emptyLoading(ADD_WISH);
+      emptyLoading(ADD_MY_MENU);
+    };
   }, []);
 
   //옵션 설정
@@ -317,6 +323,11 @@ const View = ({
   const onClickWishhandler = useCallback(() => {
     if (auth.localId === null) {
       setLoginModal(false);
+      return;
+    } else if ((wish ? Object.keys(wish).length : 0) + options.count > 20) {
+      setAlertModal(false);
+      setModalMsg('담기는 20개까지 가능합니다.');
+      return;
     } else {
       for (let i = 0; i < options.count; i++) {
         addWish({
@@ -324,7 +335,7 @@ const View = ({
           userId: auth.localId,
           wish: {
             ...options,
-            userId: auth.localId,
+            date: new Date().getTime(),
             nickname: '',
             ko: product.ko,
             en: product.en,
@@ -335,7 +346,7 @@ const View = ({
         });
       }
     }
-  }, [auth, product, options]);
+  }, [wish, auth, product, options]);
 
   //나만의 메뉴명
   const onChangeMenuHandler = useCallback(e => {
@@ -347,13 +358,19 @@ const View = ({
   const onClickMyMenuHandler = useCallback(() => {
     if (auth.localId === null) {
       setLoginModal(false);
+      return;
+    } else if (Object.keys(menuList).length + 1 > 20) {
+      setAlertModal(false);
+      setShown(!shown);
+      setModalMsg('나만의 메뉴 등록은 20개까지 가능합니다.');
+      return;
     } else {
       addMenu({
         token: auth.idToken,
         userId: auth.localId,
         menu: {
           ...options,
-          userId: auth.localId,
+          date: new Date().getTime(),
           nickname: menuName,
           ko: product.ko,
           en: product.en,
@@ -582,10 +599,19 @@ View.propTypes = {
   loadingAddMenu: PropTypes.bool,
 };
 
-const mapStateToProps = ({ auth, product, options, loadings }) => ({
+const mapStateToProps = ({
+  auth,
+  product,
+  mymenu,
+  wish,
+  options,
+  loadings,
+}) => ({
   product: product.product,
-  options: options,
-  auth: auth,
+  options,
+  auth,
+  menuList: mymenu.lists,
+  wish,
   loadingAddWish: loadings[ADD_WISH],
   loadingAddMenu: loadings[ADD_MY_MENU],
 });

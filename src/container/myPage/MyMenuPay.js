@@ -95,7 +95,7 @@ const MyMenuPay = ({
   }
 
   useEffect(() => {
-    return () => emptyLoading();
+    return () => emptyLoading(ADD_ORDER_LIST);
   }, []);
 
   //합계 계산
@@ -142,7 +142,6 @@ const MyMenuPay = ({
           token: auth.idToken,
           userId: auth.localId,
           order: {
-            userId: auth.localId,
             contents:
               (menu.nickname !== '' ? menu.nickname : menu.ko) +
               (menu.count > 1 ? ` 외 ${menu.count - 1}잔` : ' 1잔'),

@@ -8,6 +8,7 @@ import Button from '../../components/form/button/Button';
 import Input from '../../components/form/input/Input';
 import Loading from '../../components/loading/Loading';
 import { initStore, setStore, GET_STORES } from '../../store/store';
+import { emptyLoading } from '../../store/loadings';
 
 const StoreWrap = styled.div`
   fieldset {
@@ -70,6 +71,10 @@ const Store = ({ history, store, initStore, setStore, loadingStore }) => {
       setResult(Object.keys(store.stores).map(s => store.stores[s]));
     }
   }, [store.stores]);
+
+  useEffect(() => {
+    return () => emptyLoading(GET_STORES);
+  }, []);
 
   //검색필드에 따른 지점정보 재설정
   const onChangeStoreHandler = useCallback(

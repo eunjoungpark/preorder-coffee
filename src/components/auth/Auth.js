@@ -11,7 +11,6 @@ import Button from '../form/button/Button';
 import { checkEmail, checkPassword } from '../../libs/util';
 import { initAuth, initSuccess, SET_AUTH } from '../../store/auth';
 import { emptyMessage } from '../../store/error';
-import { emptyLoading } from '../../store/loadings';
 
 const Form = styled.form`
   display: flex;
@@ -81,7 +80,6 @@ const Auth = ({
   initAuth,
   initSuccess,
   emptyMessage,
-  emptyLoading,
   type,
   auth,
   error,
@@ -101,10 +99,6 @@ const Auth = ({
       touched: false,
     },
   });
-
-  useEffect(() => {
-    return () => emptyLoading();
-  }, []);
 
   const onClickAuthHandler = useCallback(() => {
     initSuccess();
@@ -246,7 +240,6 @@ Auth.propTypes = {
   initAuth: PropTypes.func.isRequired,
   initSuccess: PropTypes.func.isRequired,
   emptyMessage: PropTypes.func.isRequired,
-  emptyLoading: PropTypes.func.isRequired,
   type: PropTypes.string,
 };
 
@@ -260,7 +253,6 @@ const mapDispatchToProps = {
   initAuth,
   initSuccess,
   emptyMessage,
-  emptyLoading,
 };
 
 export default connect(
