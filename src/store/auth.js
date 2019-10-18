@@ -60,6 +60,7 @@ const auth = handleActions(
         draft.idToken = null;
         draft.localId = null;
         draft.expiresDate = null;
+        draft.success = false;
         localStorage.removeItem('idToken');
         localStorage.removeItem('localId');
         localStorage.removeItem('expiresDate');
@@ -74,7 +75,7 @@ const auth = handleActions(
       }),
     [INIT_SUCCESS]: state =>
       produce(state, draft => {
-        draft.success = null;
+        draft.success = false;
       }),
   },
   initialState,

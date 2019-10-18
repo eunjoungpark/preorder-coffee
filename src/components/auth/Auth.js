@@ -86,7 +86,6 @@ const Auth = ({
   history,
   location,
 }) => {
-  const { keep } = qs(location);
   const [formValidation, setFormValidation] = useState({
     email: {
       value: '',
@@ -99,15 +98,6 @@ const Auth = ({
       touched: false,
     },
   });
-
-  const onClickAuthHandler = useCallback(() => {
-    initSuccess();
-    if (keep) {
-      history.go(-1);
-    } else {
-      history.push('/');
-    }
-  }, []);
 
   //이메일 유효성 검사
   const onChangeHandlerEmail = useCallback(e => {
@@ -152,21 +142,7 @@ const Auth = ({
     emptyMessage(SET_AUTH);
   }, []);
 
-  return auth.localId ? (
-    auth.success ? (
-      <Modal onClickHandler={onClickAuthHandler}>
-        <AuthModal>
-          {type === 'signup' ? '회원가입이 되었습니다.' : '로그인 되었습니다.'}
-          <br />
-          <Button kind="default" onClick={onClickAuthHandler}>
-            확인
-          </Button>
-        </AuthModal>
-      </Modal>
-    ) : (
-      <WrongBox>잘못된 접근입니다.</WrongBox>
-    )
-  ) : (
+  return (
     <Form onSubmit={onSubmitHandlerAccount}>
       {error && (
         <Modal onClickHandler={onClickErrorHandler}>

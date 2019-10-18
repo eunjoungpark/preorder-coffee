@@ -143,7 +143,6 @@ const View = ({
   const [hasMsg, setHasMsg] = useState(false);
   const [shown, setShown] = useState(false);
   const [alertModal, setAlertModal] = useState(true);
-  const [loginModal, setLoginModal] = useState(true);
   const [modalMsg, setModalMsg] = useState('');
   const [menuName, setMenuName] = useState('');
 
@@ -313,7 +312,8 @@ const View = ({
   // 나만의 메뉴등록 모달
   const onClickShownHandler = useCallback(() => {
     if (auth.localId === null) {
-      setLoginModal(false);
+      setAlertModal(false);
+      setModalMsg('로그인을 먼저해주세요.');
     } else {
       setShown(!shown);
     }
@@ -322,7 +322,8 @@ const View = ({
   //위시 리스트 담기
   const onClickWishhandler = useCallback(() => {
     if (auth.localId === null) {
-      setLoginModal(false);
+      setAlertModal(false);
+      setModalMsg('로그인을 먼저해주세요.');
       return;
     } else if ((wish ? Object.keys(wish).length : 0) + options.count > 20) {
       setAlertModal(false);
@@ -357,9 +358,10 @@ const View = ({
   //나만의 음료등록
   const onClickMyMenuHandler = useCallback(() => {
     if (auth.localId === null) {
-      setLoginModal(false);
+      setAlertModal(false);
+      setModalMsg('로그인을 먼저해주세요.');
       return;
-    } else if (Object.keys(menuList).length + 1 > 20) {
+    } else if ((menuList ? Object.keys(menuList).length : 0) + 1 > 20) {
       setAlertModal(false);
       setShown(!shown);
       setModalMsg('나만의 메뉴 등록은 20개까지 가능합니다.');
@@ -387,11 +389,6 @@ const View = ({
     setAlertModal(!alertModal);
     setModalMsg('');
   }, [alertModal]);
-
-  const onClickLoginHandler = useCallback(() => {
-    setLoginModal(!loginModal);
-    history.push(`/signin?type=${type}&kind=${kind}&keep=true`);
-  }, [loginModal]);
 
   return (
     product &&
@@ -505,17 +502,6 @@ const View = ({
           {modalMsg}
           <br />
           <Button kind="default" onClick={onClickAlertHandler}>
-            확인
-          </Button>
-        </Modal>
-
-        {/* 로그인 모달 */}
-        <Modal shown={loginModal} onClickHandler={onClickLoginHandler}>
-          로그인 먼저해주세요.
-          <br />
-          로그인 페이지로 이동합니다.
-          <br />
-          <Button kind="default" onClick={onClickLoginHandler}>
             확인
           </Button>
         </Modal>

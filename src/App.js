@@ -98,6 +98,16 @@ const App = ({
   }, []);
 
   useEffect(() => {
+    if (auth.success) {
+      setAlertModal(false);
+      setModalMsg('로그인 되었습니다.');
+    } else if (auth.success === false) {
+      setAlertModal(false);
+      setModalMsg('로그아웃 되었습니다.');
+    }
+  }, [auth.success]);
+
+  useEffect(() => {
     if (auth.localId) {
       //위리리스트 가져옴
       initWishList({

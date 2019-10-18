@@ -106,7 +106,7 @@ const Lnb = ({
               </NavLink>
             </li>
             <li>
-              <NavLink to="/logout" onClick={onLogoutHandler}>
+              <NavLink to="/" onClick={onLogoutHandler}>
                 로그아웃
               </NavLink>
             </li>
