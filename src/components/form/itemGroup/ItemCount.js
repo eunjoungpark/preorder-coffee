@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import Button from '../button/Button';
 
 const ItemCountStyle = styled.fieldset`
-  margin: 15px 5px;
+  margin: 10px 5px;
   .label {
     float: left;
     vertical-align: middle;
+    font-size: 14px;
     line-height: 30px;
   }
   .count {

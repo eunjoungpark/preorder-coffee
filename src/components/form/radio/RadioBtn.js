@@ -11,12 +11,13 @@ const theme = {
 const Radio = styled.span`
   position: relative;
   display: inline-block;
-  margin: 0 5px;
+  margin: 0 2px;
   text-align: center;
   label {
     display: block;
     border-radius: 3px;
     padding: 10px;
+    font-size: 14px;
     border: 1px solid ${props => props.theme.color};
     color: ${props => props.theme.color};
   }

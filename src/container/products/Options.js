@@ -26,9 +26,12 @@ import {
 const OptionGroup = styled.div`
   > ul > li {
     position: relative;
-    padding: 20px 10px;
     &:nth-child(odd) {
       background: #ededed;
+    }
+    a {
+      display: block;
+      padding: 20px 10px;
     }
     .arrowR {
       position: absolute;

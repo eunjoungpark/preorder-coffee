@@ -54,6 +54,7 @@ const WishWrap = styled.div`
       .store {
         text-align: center;
         line-height: 1.5;
+        font-size: 14px;
         a {
           display: inline-block;
           padding: 3px 5px;

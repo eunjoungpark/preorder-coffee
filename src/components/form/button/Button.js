@@ -14,7 +14,6 @@ const theme = {
 
 const Btn = styled.button`
   padding: 5px 10px;
-  font-size: 20px;
   background-color: ${props => props.theme.color};
   border-radius: 3px;
   color: ${props => props.theme.font};

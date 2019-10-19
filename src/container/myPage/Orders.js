@@ -5,12 +5,7 @@ import styled from 'styled-components';
 import { commas } from '../../libs/util';
 import { Contents, PageTitle } from '../../components/common';
 import Loading from '../../components/loading/Loading';
-import {
-  initOrderList,
-  emptyOrderList,
-  ORDER_LIST,
-  ADD_ORDER_LIST,
-} from '../../store/order';
+import { initOrderList, emptyOrderList, ORDER_LIST } from '../../store/order';
 import { emptyLoading } from '../../store/loadings';
 
 const OrderWrap = styled.div`
@@ -59,7 +54,6 @@ const Orders = ({
   initOrderList,
   emptyOrderList,
   loadingOrder,
-  loadingAddOrder,
   history,
 }) => {
   const [isScroll, setIsScroll] = useState(false);
@@ -178,7 +172,6 @@ const mapStateToProps = ({ auth, order, loadings }) => ({
   page: order.endAt,
   finish: order.finish,
   loadingOrder: loadings[ORDER_LIST],
-  loadingAddOrder: loadings[ADD_ORDER_LIST],
 });
 
 const mapDispatchToProps = { initOrderList, emptyOrderList };

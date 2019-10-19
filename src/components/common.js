@@ -36,9 +36,10 @@ export const ModalContents = styled.div`
 export const PageTitle = styled.h2`
   margin-bottom: 30px;
   color: #000;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: bold;
   line-height: 1.5;
+  letter-spacing: -1px;
   .ko {
     display: block;
     font-size: 18px;
@@ -49,14 +50,14 @@ export const PageTitle = styled.h2`
 export const PageSecnTitle = styled.h2`
   margin-bottom: 20px;
   color: #333;
-  font-size: 22px;
+  font-size: 18px;
 `;
 
 export const SubTitle = styled.h3`
   margin: 50px 0 15px;
   padding: 0 10px 15px 10px;
   color: #333;
-  font-size: 20px;
+  font-size: 18px;
   border-bottom: 1px solid #ababab;
 `;
 

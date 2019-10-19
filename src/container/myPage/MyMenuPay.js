@@ -29,12 +29,11 @@ const ItemBase = styled.div`
     overflow: hidden;
   }
   p.ko {
-    font-size: 18px;
     color: #333;
     line-height: 1.5;
   }
   p.price {
-    font-size: 22px;
+    font-size: 18px;
     color: #8c6046;
   }
 `;
@@ -62,6 +61,7 @@ const PayBox = styled.div`
     .store {
       text-align: center;
       line-height:1.5;
+      font-size:14px;
       a {
         display: inline-block;
           padding: 5px;
@@ -168,7 +168,9 @@ const MyMenuPay = ({
   return (
     menu && (
       <Contents>
-        <PageTitle>나만의 음료 주문</PageTitle>
+        <PageTitle>
+          나만의 음료 <span className="hidden">주문</span>
+        </PageTitle>
         {loadingAddOrder && <Loading />}
         {loadingAddOrder === false && (
           <Modal onClickHandler={onClickCompleteHandler}>

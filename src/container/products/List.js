@@ -38,24 +38,22 @@ const ListItem = styled.li`
     margin: 0 auto 10px auto;
     display: block;
   }
+  figcaption {
+    p {
+      margin-bottom: 7px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
   p.en {
-    margin-bottom: 10px;
-    font-size: 18px;
     color: #3e4759;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   p.ko {
-    margin-bottom: 10px;
-    font-size: 18px;
     color: #333;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   p.price {
-    font-size: 22px;
+    font-size: 18px;
     color: #8c6046;
   }
 

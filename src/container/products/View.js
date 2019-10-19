@@ -5,7 +5,7 @@ import qs from '../../libs/qs';
 import produce from 'immer';
 import PropTypes from 'prop-types';
 import AriaModal from 'react-aria-modal';
-import { MdSend } from 'react-icons/md';
+import { MdKeyboardArrowRight } from 'react-icons/md';
 import styled from 'styled-components';
 import Button from '../../components/form/button/Button';
 import RadioBtn from '../../components/form/radio/RadioBtn';
@@ -56,12 +56,11 @@ const ItemBase = styled.div`
     overflow: hidden;
   }
   p.ko {
-    font-size: 18px;
     color: #333;
     line-height: 1.5;
   }
   p.price {
-    font-size: 22px;
+    font-size: 18px;
     color: #8c6046;
   }
 `;
@@ -75,7 +74,6 @@ const OptionGroup = styled.section`
     color: #000;
     text-align: center;
     line-height: 1.2;
-    font-size: 17px;
     svg {
       vertical-align: top;
       font-size: 20px;
@@ -477,7 +475,7 @@ const View = ({
           <SubTitle>추가옵션</SubTitle>
           <Link to={`/options?type=${type}&kind=${kind}`}>
             <p className="noneMsg">
-              옵션선택 하러가기 <MdSend />
+              옵션선택 하러가기 <MdKeyboardArrowRight />
             </p>
           </Link>
           <FlextCont>

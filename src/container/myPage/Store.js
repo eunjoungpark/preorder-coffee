@@ -34,9 +34,9 @@ const StoreWrap = styled.div`
       text-align: left;
       .storeIcon {
         float: left;
-        width: 80px;
-        height: 80px;
-        padding: 25px;
+        width: 60px;
+        height: 60px;
+        padding: 15px;
         color: #fff;
         background-color: #999;
         font-size: 30px;
@@ -44,14 +44,15 @@ const StoreWrap = styled.div`
       .storeInfo {
         display: block;
         overflow: hidden;
-        padding: 17px;
+        padding: 0 0 0 10px;
         line-height: 1.5;
         strong {
-          font-size: 18px;
+          font-size: 16px;
         }
         address {
           font-style: normal;
-          font-size: 16px;
+          font-size: 14px;
+          line-height: 1.3;
         }
       }
     }

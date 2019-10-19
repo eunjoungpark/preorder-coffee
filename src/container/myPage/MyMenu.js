@@ -47,11 +47,9 @@ const MyMenuWrap = styled.div`
           line-height: 1.5;
 
           &.ko {
-            font-size: 18px;
             font-weight: bold;
           }
           &.en {
-            font-size: 16px;
             color: #8c6046;
           }
         }
@@ -79,7 +77,6 @@ const EmptyBox = styled.div`
   padding: 40px;
   color: #666;
   text-align: center;
-  font-size: 16px;
 `;
 
 const MyMemu = ({
@@ -144,7 +141,9 @@ const MyMemu = ({
         </Button>
       </Modal>
       <Contents>
-        <PageTitle>나만의 메뉴 목록</PageTitle>
+        <PageTitle>
+          나만의 메뉴<span className="hidden">목록</span>
+        </PageTitle>
         <MyMenuWrap>
           {menuList ? (
             <ul className="list">
