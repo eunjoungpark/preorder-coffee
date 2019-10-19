@@ -138,7 +138,7 @@ const Orders = ({
                     <td>
                       <p className="info">{o.contents}</p>
                       <p className="total">
-                        <strong>결제금액 : </strong> {commas(o.total)}원
+                        <strong>결제액 : </strong> {commas(o.total)}원
                       </p>
                     </td>
                     <td>{o.store.name}</td>
