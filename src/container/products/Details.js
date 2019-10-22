@@ -223,7 +223,7 @@ const Detail = ({
     if (iceValue === 'normal') {
       onSetMessages({ ice: '' });
     } else {
-      onSetMessages({ ice: ice[iceValue] });
+      onSetMessages({ ice: `얼음 ${ice[iceValue]}` });
     }
     backPage();
     e.preventDefault();
@@ -242,7 +242,7 @@ const Detail = ({
     if (whippingValue === 'normal') {
       onSetMessages({ whipping: '' });
     } else {
-      onSetMessages({ whipping: whipping[whippingValue] });
+      onSetMessages({ whipping: `휘핑 ${whipping[whippingValue]}` });
     }
     backPage();
     e.preventDefault();
@@ -268,10 +268,10 @@ const Detail = ({
 
     onSetMilk(milkVal);
     onSetMessages({
-      milkKind:
-        typeValue === 'milk' ? '' : `우유 종류 : ${milk.kind[typeValue]}`,
-      milkVolume:
-        volumeValue === 'normal' ? '' : `우유 양 : ${milk.volume[volumeValue]}`,
+      milk:
+        typeValue === 'milk' && volumeValue === 'normal'
+          ? ''
+          : `${milk.kind[typeValue]} ${milk.volume[volumeValue]}`,
     });
     backPage();
     e.preventDefault();
@@ -290,7 +290,7 @@ const Detail = ({
     if (waterValue === 'normal') {
       onSetMessages({ water: '' });
     } else {
-      onSetMessages({ water: water[waterValue] });
+      onSetMessages({ water: `물 ${water[waterValue]}` });
     }
     backPage();
     e.preventDefault();

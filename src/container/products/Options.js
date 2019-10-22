@@ -177,16 +177,16 @@ const Option = ({ history, location, product, options, onSetTotal }) => {
                     <Link to={`/details?type=${type}&kind=${kind}&option=milk`}>
                       우유
                       <ul>
-                        {Object.keys(options.milk.kind).map(prop =>
-                          options.milk.kind[prop] ? (
-                            <li key={prop}>{milk.kind[prop]}</li>
-                          ) : null,
-                        )}
-                        {Object.keys(options.milk.volume).map(prop =>
-                          options.milk.volume[prop] ? (
-                            <li key={prop}>우유양 {milk.volume[prop]}</li>
-                          ) : null,
-                        )}
+                        <li>
+                          {Object.keys(options.milk.kind).map(prop =>
+                            options.milk.kind[prop] ? milk.kind[prop] : null,
+                          )}
+                          {Object.keys(options.milk.volume).map(prop =>
+                            options.milk.volume[prop]
+                              ? `(${milk.volume[prop]})`
+                              : null,
+                          )}
+                        </li>
                       </ul>
                       <MdKeyboardArrowRight className="arrowR" />
                     </Link>

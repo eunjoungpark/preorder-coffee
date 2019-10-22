@@ -1,8 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import qs from '../../libs/qs';
 import styled from 'styled-components';
 import produce from 'immer';
 import Modal from '../modal/Modal';
